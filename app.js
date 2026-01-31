@@ -3,7 +3,8 @@
 const state = {
     expenses: [],
     view: 'daily', // daily, weekly, monthly
-    user: null
+    user: null,
+    monthlyBudget: 0
 };
 
 // Category Config
@@ -168,16 +169,28 @@ async function loadProfile() {
             document.getElementById('profile-college').value = data.college || '';
             document.getElementById('profile-bio').value = data.bio || '';
 
+            // Store budget in state
+            state.monthlyBudget = data.monthly_budget || 0;
+
+            // Update budget display
+            if (data.monthly_budget) {
+                document.getElementById('monthly-limit').textContent = `₹${data.monthly_budget}`;
+                document.getElementById('weekly-limit').textContent = `₹${Math.round(data.monthly_budget / 4)}`;
+                document.getElementById('daily-limit').textContent = `₹${Math.round(data.monthly_budget / 30)}`;
+            }
+
             // Update Avatar
             if (data.avatar_url) {
                 updateAvatarUI(data.avatar_url);
             }
         } else {
             document.getElementById('profile-email').value = state.user.email;
+            state.monthlyBudget = 0;
         }
 
     } catch (err) {
         console.error('Error loading profile:', err.message);
+
     }
 }
 
@@ -304,7 +317,7 @@ function renderExpenses() {
 
 function updateBalance() {
     const totalSpent = state.expenses.reduce((sum, item) => sum + Number(item.amount), 0);
-    const budget = 25000;
+    const budget = state.monthlyBudget || 0;
     const remaining = budget - totalSpent;
     elements.budgetDisplay.innerText = `₹${remaining}`;
 }
@@ -357,6 +370,9 @@ function setupEventListeners() {
                     .eq('id', state.user.id);
 
                 if (error) throw error;
+
+                // Update state
+                state.monthlyBudget = monthlyBudget;
 
                 // Update UI
                 document.getElementById('monthly-limit').textContent = `₹${monthlyBudget}`;

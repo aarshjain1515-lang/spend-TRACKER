@@ -314,6 +314,8 @@ window.openModal = (id) => document.getElementById(id).classList.add('active');
 window.closeModal = (id) => document.getElementById(id).classList.remove('active');
 window.openProfileModal = () => { loadProfile(); openModal('profile-modal'); };
 window.openExpenseModal = () => openModal('expense-modal');
+window.openBudgetModal = () => openModal('budget-modal');
+
 window.switchView = (view) => {
     state.view = view;
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -338,4 +340,36 @@ window.logout = async () => {
 function setupEventListeners() {
     if (elements.addForm) elements.addForm.addEventListener('submit', handleAddExpense);
     if (elements.profileForm) elements.profileForm.addEventListener('submit', handleSaveProfile);
+
+    // Budget form handler
+    const budgetForm = document.getElementById('budget-form');
+    if (budgetForm) {
+        budgetForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const monthlyBudget = parseFloat(document.getElementById('monthly-budget-input').value);
+
+            if (!state.user) return;
+
+            try {
+                const { error } = await supabase
+                    .from('profiles')
+                    .update({ monthly_budget: monthlyBudget })
+                    .eq('id', state.user.id);
+
+                if (error) throw error;
+
+                // Update UI
+                document.getElementById('monthly-limit').textContent = `₹${monthlyBudget}`;
+                document.getElementById('weekly-limit').textContent = `₹${Math.round(monthlyBudget / 4)}`;
+                document.getElementById('daily-limit').textContent = `₹${Math.round(monthlyBudget / 30)}`;
+
+                closeModal('budget-modal');
+                updateBalance();
+                alert('✅ Budget updated successfully!');
+            } catch (err) {
+                console.error('Error updating budget:', err);
+                alert('Failed to update budget: ' + err.message);
+            }
+        });
+    }
 }

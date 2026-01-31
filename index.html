@@ -90,57 +90,96 @@
         }
         checkSession();
 
-        // login Function (Demo User Flow)
+        // login Function (Demo User Flow) - DEBUG VERSION
         async function tryGoogleLogin() {
             const btn = document.getElementById('googleBtn');
             btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Connecting...';
             btn.disabled = true;
+
+            console.log('=== LOGIN START ===');
 
             try {
                 const email = 'demo@spendz.com';
                 const password = 'password123';
 
                 // 1. Try to Login
-                let { data, error } = await supabase.auth.signInWithPassword({
+                console.log('Step 1: Trying to login...');
+                let result = await supabase.auth.signInWithPassword({
                     email,
                     password
                 });
 
-                // 2. If User Not Found (Invalid login), Create Account
-                if (error && (error.message.includes('Invalid login') || error.message.includes('not found') || error.message.includes('password'))) {
-                    console.log("Creating demo account...");
+                console.log('Login result:', {
+                    hasSession: !!result.data?.session,
+                    hasUser: !!result.data?.user,
+                    errorMsg: result.error?.message
+                });
 
-                    const signUp = await supabase.auth.signUp({
+                // 2. If User Not Found, Create Account
+                if (result.error) {
+                    console.log('Step 2: Login failed, creating account...');
+                    console.log('Error was:', result.error.message);
+
+                    const signUpResult = await supabase.auth.signUp({
                         email,
                         password,
                         options: { data: { full_name: 'Demo User' } }
                     });
 
-                    if (signUp.error) throw signUp.error;
+                    console.log('Signup result:', {
+                        hasSession: !!signUpResult.data?.session,
+                        hasUser: !!signUpResult.data?.user,
+                        errorMsg: signUpResult.error?.message
+                    });
 
-                    // If login was successful via signup
-                    if (signUp.data.session) {
-                        data = signUp.data;
-                        error = null;
+                    if (signUpResult.error) {
+                        console.error('Signup failed:', signUpResult.error);
+                        throw signUpResult.error;
+                    }
+
+                    // Check if we got a session
+                    if (signUpResult.data.session) {
+                        console.log('✅ Got session from signup!');
+                        result = signUpResult;
+                    } else if (signUpResult.data.user && !signUpResult.data.session) {
+                        console.error('⚠️ User created but NO SESSION!');
+                        console.error('This means email confirmation is STILL ON');
+                        alert('Email confirmation is STILL enabled in Supabase!\n\nDouble check:\nAuthentication > Providers > Email > "Confirm email" = OFF');
+                        btn.innerHTML = '<img src="https://www.svgrepo.com/show/475656/google-color.svg" style="width: 20px; height: 20px;"> Continue with Google';
+                        btn.disabled = false;
+                        return;
                     } else {
-                        // Retry login
-                        const retry = await supabase.auth.signInWithPassword({ email, password });
-                        data = retry.data;
-                        error = retry.error;
+                        console.log('Step 3: Retrying login...');
+                        result = await supabase.auth.signInWithPassword({ email, password });
+                        console.log('Retry result:', {
+                            hasSession: !!result.data?.session,
+                            errorMsg: result.error?.message
+                        });
                     }
                 }
 
-                if (error) throw error;
+                if (result.error) {
+                    console.error('Final error:', result.error);
+                    throw result.error;
+                }
 
-                console.log('✅ Logged in as Demo User');
+                if (!result.data.session) {
+                    console.error('❌ NO SESSION in final result!');
+                    throw new Error('No session - check Supabase email confirmation settings');
+                }
+
+                console.log('✅ SUCCESS! Redirecting...');
+                console.log('Session user ID:', result.data.session.user.id);
+                console.log('=== LOGIN END ===');
+
                 localStorage.setItem('spendzLoggedIn', 'true');
                 window.location.href = 'dashboard.html';
 
             } catch (err) {
-                console.error("❌ Login Error:", err);
+                console.error("❌ LOGIN FAILED:", err);
                 btn.innerHTML = '<img src="https://www.svgrepo.com/show/475656/google-color.svg" style="width: 20px; height: 20px;"> Continue with Google';
                 btn.disabled = false;
-                alert('Login failed: ' + err.message);
+                alert('Login failed: ' + err.message + '\n\nOpen console (F12) for details');
             }
         }
 

@@ -1,10 +1,10 @@
-
 // Initialize Supabase Client
+// Uses environment variables for security
 
-// Configuration
-const supabaseUrl = 'https://dgpobgmnjtxnteiegutq.supabase.co';
-// Real Anon Key (Updated Feb 1, 2026)
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRncG9iZ21uanR4bnRlaWVndXRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4Nzk1MjMsImV4cCI6MjA4NTQ1NTUyM30.6pj64r3xrFA8njYz4MyW8NFWQb2bFFTXoFDosq0HsCQ';
+// For local development, these will be loaded from .env
+// For Vercel deployment, set these in Project Settings > Environment Variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://dgpobgmnjtxnteiegutq.supabase.co';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRncG9iZ21uanR4bnRlaWVndXRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4Nzk1MjMsImV4cCI6MjA4NTQ1NTUyM30.6pj64r3xrFA8njYz4MyW8NFWQb2bFFTXoFDosq0HsCQ';
 
 // Safe Initialization
 try {
@@ -18,7 +18,7 @@ try {
         // Assign to global window object
         window.supabase = client;
 
-        console.log("✅ Supabase Client Initialized with Real Key");
+        console.log("✅ Supabase Client Initialized");
     }
 } catch (err) {
     console.error("❌ Supabase Init Failed:", err);

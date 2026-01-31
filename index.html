@@ -43,6 +43,7 @@
                     <p>Enter your details to access your dashboard.</p>
                 </div>
 
+
                 <!-- Google Sign In Button -->
                 <button class="btn btn-google" id="googleBtn" onclick="tryGoogleLogin()">
                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google"
@@ -54,27 +55,46 @@
                     <span>OR CONTINUE WITH EMAIL</span>
                 </div>
 
+                <!-- Email Input -->
                 <div class="mb-4">
                     <label class="form-label">Email Address</label>
-                    <input type="email" id="emailInput" class="form-input" placeholder="name@university.edu">
+                    <input type="email" id="emailInput" class="form-input" placeholder="name@university.edu"
+                        autocomplete="email">
                 </div>
-                <!-- Error Message Container -->
+
+                <!-- Error Message for Email -->
                 <div id="emailError" class="error-message">
-                    <i class="fa-solid fa-circle-exclamation"></i> Please enter a valid email address.
+                    <i class="fa-solid fa-circle-exclamation"></i> <span id="emailErrorText">Please enter a valid email
+                        address.</span>
                 </div>
 
-                <div class="mb-6">
+                <!-- Password Input with Toggle -->
+                <div class="mb-4">
                     <label class="form-label">Password</label>
-                    <input type="password" id="passwordInput" class="form-input" placeholder="••••••••">
+                    <div style="position: relative;">
+                        <input type="password" id="passwordInput" class="form-input" placeholder="••••••••"
+                            autocomplete="current-password" style="padding-right: 45px;">
+                        <button type="button" onclick="togglePasswordVisibility()"
+                            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-gray); cursor: pointer; padding: 5px;">
+                            <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <button class="btn btn-primary" onclick="handleDirectLogin()">
+                <!-- General Error Message -->
+                <div id="generalError" class="error-message" style="display: none; margin-bottom: 15px;">
+                    <i class="fa-solid fa-circle-exclamation"></i> <span id="generalErrorText"></span>
+                </div>
+
+                <!-- Sign In Button -->
+                <button class="btn btn-primary" id="signInBtn" onclick="handleDirectLogin()">
                     Sign In
                 </button>
 
+                <!-- Sign Up Link -->
                 <p style="margin-top: 1.5rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
                     Don't have an account? <a href="#" onclick="toggleSignUp()"
-                        style="color: var(--primary); text-decoration: none;">Sign up for free</a>
+                        style="color: var(--primary); text-decoration: none; font-weight: 500;">Sign up for free</a>
                 </p>
             </div>
         </div>
@@ -187,27 +207,29 @@
         async function handleDirectLogin() {
             const emailInput = document.getElementById('emailInput');
             const passwordInput = document.getElementById('passwordInput');
-            const errorMsg = document.getElementById('emailError');
-            const btn = document.querySelector('.btn-primary');
+            const btn = document.getElementById('signInBtn');
 
-            // Reset Error
-            errorMsg.style.display = 'none';
-            emailInput.style.borderColor = 'rgba(255,255,255,0.1)';
+            // Hide previous errors
+            hideErrors();
 
-            // Validate
+            // Validate Email
             const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if (!re.test(String(emailInput.value).toLowerCase())) {
-                errorMsg.style.display = 'block';
+            if (!emailInput.value || !re.test(String(emailInput.value).toLowerCase())) {
+                showError('Please enter a valid email address.');
                 emailInput.style.borderColor = '#ef4444';
+                emailInput.focus();
                 return;
             }
 
+            // Validate Password
             if (passwordInput.value.length < 6) {
-                alert("Password must be at least 6 characters");
+                showError('Password must be at least 6 characters.', true);
+                passwordInput.style.borderColor = '#ef4444';
+                passwordInput.focus();
                 return;
             }
 
-            // Proceed to Login with Supabase
+            // Show loading state
             btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Authenticating...';
             btn.disabled = true;
 
@@ -243,8 +265,8 @@
                     if (signUpResult.data.session) {
                         result = signUpResult;
                     } else {
-                        alert('Account created! Please check your email to confirm (or disable email confirmation in Supabase settings)');
-                        btn.innerHTML = 'Sign In';
+                        showError('Account created! Please check your email to confirm.', true);
+                        btn.innerHTML = btn.innerText.includes('Sign Up') ? 'Sign Up' : 'Sign In';
                         btn.disabled = false;
                         return;
                     }
@@ -253,25 +275,42 @@
                 if (result.error) throw result.error;
 
                 if (!result.data.session) {
-                    throw new Error('No session created');
+                    throw new Error('Authentication failed. Please try again.');
                 }
 
                 console.log('✅ Login successful!');
                 localStorage.setItem('spendzLoggedIn', 'true');
-                window.location.href = 'dashboard.html';
+
+                // Success animation
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Success!';
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 500);
 
             } catch (err) {
                 console.error('❌ Login failed:', err);
-                btn.innerHTML = 'Sign In';
+                btn.innerHTML = btn.innerText.includes('Sign Up') ? 'Sign Up' : 'Sign In';
                 btn.disabled = false;
-                alert('Login failed: ' + err.message);
+
+                // User-friendly error messages
+                let errorMessage = 'Login failed. Please try again.';
+                if (err.message.includes('Email not confirmed')) {
+                    errorMessage = 'Please confirm your email address first.';
+                } else if (err.message.includes('Invalid')) {
+                    errorMessage = 'Invalid email or password.';
+                } else if (err.message) {
+                    errorMessage = err.message;
+                }
+
+                showError(errorMessage, true);
             }
         }
+
 
         function toggleSignUp() {
             const title = document.querySelector('.welcome-text h2');
             const subtitle = document.querySelector('.welcome-text p');
-            const btn = document.querySelector('.btn-primary');
+            const btn = document.querySelector('#signInBtn');
             const link = document.querySelector('p a');
 
             if (btn.innerText === 'Sign In') {
@@ -287,10 +326,54 @@
             }
         }
 
-        // Clear errors on typing
-        document.getElementById('emailInput').addEventListener('input', function () {
+        // Password visibility toggle
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('passwordInput');
+            const toggleIcon = document.getElementById('togglePasswordIcon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Show error message
+        function showError(message, isGeneral = false) {
+            if (isGeneral) {
+                const generalError = document.getElementById('generalError');
+                const generalErrorText = document.getElementById('generalErrorText');
+                generalErrorText.textContent = message;
+                generalError.style.display = 'flex';
+            } else {
+                const emailError = document.getElementById('emailError');
+                const emailErrorText = document.getElementById('emailErrorText');
+                emailErrorText.textContent = message;
+                emailError.style.display = 'flex';
+            }
+        }
+
+        // Hide all errors
+        function hideErrors() {
             document.getElementById('emailError').style.display = 'none';
-            this.style.borderColor = 'rgba(255,255,255,0.1)';
+            document.getElementById('generalError').style.display = 'none';
+            document.getElementById('emailInput').style.borderColor = 'rgba(255,255,255,0.1)';
+            document.getElementById('passwordInput').style.borderColor = 'rgba(255,255,255,0.1)';
+        }
+
+        // Clear errors on typing
+        document.getElementById('emailInput').addEventListener('input', hideErrors);
+        document.getElementById('passwordInput').addEventListener('input', hideErrors);
+
+        // Enter key to submit
+        document.getElementById('passwordInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                handleDirectLogin();
+            }
         });
     </script>
 </body>

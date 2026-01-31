@@ -20,6 +20,10 @@
     --radius-md: 12px;
     --radius-sm: 8px;
     --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
+
+    /* Fonts */
+    --font-heading: 'Space Grotesk', 'Poppins', sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 * {
@@ -29,12 +33,56 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    font-style: italic;
+    font-family: var(--font-body);
+    font-weight: 400;
     background-color: var(--bg-dark);
     color: var(--text-white);
     line-height: 1.6;
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* === Typography === */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 800;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #6366f1 0%, #d946ef 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: var(--font-heading);
+    font-weight: 800;
 }
 
 /* === Layout Grid (Login Page) === */
@@ -87,18 +135,21 @@ body {
 }
 
 .brand-title {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-heading);
     font-size: 3.5rem;
     font-weight: 800;
     margin-bottom: 1rem;
     background: linear-gradient(to right, #fff, #a5b4fc);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
+    letter-spacing: -0.03em;
 }
 
 .brand-tagline {
     font-size: 1.25rem;
     color: var(--text-gray);
+    font-weight: 400;
 }
 
 /* === Login Side (Right) === */

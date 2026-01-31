@@ -110,6 +110,49 @@
         }
         checkSession();
 
+        // === Helper Functions ===
+
+        // Show error message
+        function showError(message, isGeneral = false) {
+            if (isGeneral) {
+                const generalError = document.getElementById('generalError');
+                const generalErrorText = document.getElementById('generalErrorText');
+                generalErrorText.textContent = message;
+                generalError.style.display = 'flex';
+            } else {
+                const emailError = document.getElementById('emailError');
+                const emailErrorText = document.getElementById('emailErrorText');
+                emailErrorText.textContent = message;
+                emailError.style.display = 'flex';
+            }
+        }
+
+        // Hide all errors
+        function hideErrors() {
+            document.getElementById('emailError').style.display = 'none';
+            document.getElementById('generalError').style.display = 'none';
+            document.getElementById('emailInput').style.borderColor = 'rgba(255,255,255,0.1)';
+            document.getElementById('passwordInput').style.borderColor = 'rgba(255,255,255,0.1)';
+        }
+
+        // Password visibility toggle
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('passwordInput');
+            const toggleIcon = document.getElementById('togglePasswordIcon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        // === Login Functions ===
+
         // login Function (Demo User Flow) - DEBUG VERSION
         async function tryGoogleLogin() {
             const btn = document.getElementById('googleBtn');
@@ -324,45 +367,6 @@
                 btn.innerText = 'Sign In';
                 link.innerText = 'Sign up for free';
             }
-        }
-
-        // Password visibility toggle
-        function togglePasswordVisibility() {
-            const passwordInput = document.getElementById('passwordInput');
-            const toggleIcon = document.getElementById('togglePasswordIcon');
-
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
-            }
-        }
-
-        // Show error message
-        function showError(message, isGeneral = false) {
-            if (isGeneral) {
-                const generalError = document.getElementById('generalError');
-                const generalErrorText = document.getElementById('generalErrorText');
-                generalErrorText.textContent = message;
-                generalError.style.display = 'flex';
-            } else {
-                const emailError = document.getElementById('emailError');
-                const emailErrorText = document.getElementById('emailErrorText');
-                emailErrorText.textContent = message;
-                emailError.style.display = 'flex';
-            }
-        }
-
-        // Hide all errors
-        function hideErrors() {
-            document.getElementById('emailError').style.display = 'none';
-            document.getElementById('generalError').style.display = 'none';
-            document.getElementById('emailInput').style.borderColor = 'rgba(255,255,255,0.1)';
-            document.getElementById('passwordInput').style.borderColor = 'rgba(255,255,255,0.1)';
         }
 
         // Clear errors on typing

@@ -965,159 +965,153 @@ header {
     max-height: 250px;
 }
 
-/* === Main Header (Top Corners) === */
-.main-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-    z-index: 1000;
-    background: rgba(13, 2, 33, 0.8);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
+/* === Landing Page Sections === */
 
-.app-container {
-    padding-top: 100px;
-    /* Push content down */
-    position: relative;
-    z-index: 1;
-}
-
-/* === Landing Page Sections (Wide & Swipeable) === */
-
-/* Section Container - Wider */
+/* Section Container */
 .section-container {
-    max-width: 95%;
-    /* Use more screen width */
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
 }
 
 .section-title {
     font-family: var(--font-heading);
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 800;
-    text-align: left;
-    /* Align left for wider look */
-    margin-bottom: 0.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
     background: linear-gradient(135deg, var(--primary), var(--accent));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    padding-left: 20px;
 }
 
 .section-subtitle {
-    text-align: left;
-    padding-left: 22px;
+    text-align: center;
     color: var(--text-gray);
-    font-size: 1.2rem;
-    margin-bottom: 3rem;
+    font-size: 1.1rem;
+    margin-bottom: 4rem;
 }
 
-/* Horizontal Swipe Container Base */
-.swipe-scroll-wrapper {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 30px;
-    padding: 20px;
-    padding-bottom: 40px;
-    /* Space for scrollbar or shadow */
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
-    scrollbar-width: none;
-    /* Hide scrollbar Firefox */
+/* Features Section */
+.features-section {
+    padding: 6rem 0;
+    position: relative;
+    z-index: 1;
 }
 
-.swipe-scroll-wrapper::-webkit-scrollbar {
-    display: none;
-    /* Hide scrollbar Chrome/Safari */
-}
-
-/* Features Section - Swipe */
 .features-grid {
-    display: flex;
-    /* Override grid */
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 30px;
-    padding: 20px;
-    padding-bottom: 40px;
-    scrollbar-width: none;
-}
-
-.features-grid::-webkit-scrollbar {
-    display: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
 }
 
 .feature-card {
-    min-width: 350px;
-    /* Fixed width for cards */
-    max-width: 400px;
-    scroll-snap-align: center;
     background: rgba(26, 11, 46, 0.6);
     border: 2px solid rgba(0, 245, 255, 0.2);
     border-radius: var(--radius-lg);
-    padding: 3rem 2rem;
-    text-align: left;
-    transition: all 0.4s ease;
-    flex-shrink: 0;
-    /* Prevent shrinking */
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
 }
 
 .feature-card:hover {
-    transform: translateY(-15px) scale(1.02);
+    transform: translateY(-10px);
     border-color: var(--primary);
-    box-shadow: 0 10px 40px rgba(0, 245, 255, 0.2);
-    background: rgba(26, 11, 46, 0.8);
+    box-shadow: 0 0 30px rgba(0, 245, 255, 0.3);
 }
 
 .feature-icon {
-    font-size: 3.5rem;
-    margin-bottom: 1.5rem;
-    display: inline-block;
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+    font-size: 3rem;
+    margin-bottom: 1rem;
 }
 
-/* How It Works - Swipe */
-.how-it-works-section .steps-container {
+.feature-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.feature-card p {
+    color: var(--text-gray);
+    line-height: 1.6;
+}
+
+/* How It Works Section */
+.how-it-works-section {
+    padding: 6rem 0;
+    background: rgba(26, 11, 46, 0.3);
+    position: relative;
+    z-index: 1;
+}
+
+.steps-container {
     display: flex;
-    flex-wrap: nowrap;
-    /* Prevent wrapping */
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 40px;
-    padding: 20px;
-    justify-content: flex-start;
-    /* Align start for scroll */
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
 }
 
 .step-card {
-    min-width: 320px;
-    scroll-snap-align: center;
-    flex: 0 0 auto;
-    margin: 0;
+    background: rgba(26, 11, 46, 0.8);
+    border: 2px solid rgba(255, 0, 110, 0.3);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+    transition: all 0.3s ease;
+}
+
+.step-card:hover {
+    transform: scale(1.05);
+    border-color: var(--accent);
+    box-shadow: 0 0 30px rgba(255, 0, 110, 0.4);
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0 auto 1.5rem;
+    color: white;
 }
 
 .step-arrow {
-    display: none;
+    font-size: 2rem;
+    color: var(--primary);
+    font-weight: bold;
 }
 
-/* Hide arrows in swipe mode */
+.step-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: white;
+}
 
+.step-card p {
+    color: var(--text-gray);
+    line-height: 1.6;
+}
 
-/* FAQ Section - Grid Layout instead of vertical list */
+/* FAQ Section */
+.faq-section {
+    padding: 6rem 0;
+    position: relative;
+    z-index: 1;
+}
+
 .faq-container {
-    max-width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .faq-item {
@@ -1127,34 +1121,6 @@ header {
     margin-bottom: 1rem;
     overflow: hidden;
     transition: all 0.3s ease;
-}
-
-/* === Dashboard Swipe Cards === */
-.dashboard-swipe {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-.swipe-card {
-    min-width: 320px;
-    max-width: 400px;
-    flex: 0 0 auto;
-    scroll-snap-align: center;
-    margin-bottom: 0 !important;
-    /* Override standard card margin */
-    height: auto;
-}
-
-/* Ensure chart canvas fits */
-.swipe-card canvas {
-    max-height: 250px;
-    width: 100% !important;
-}
-
-@media (min-width: 768px) {
-    .swipe-card {
-        min-width: 380px;
-    }
 }
 
 .faq-item:hover {

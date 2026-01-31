@@ -38,116 +38,111 @@
 </head>
 
 <body>
-    <!-- Full Width Header -->
-    <header class="main-header">
-        <div class="logo">
-            <span class="gradient-text" style="font-size: 1.8rem; letter-spacing: -1px;">SpendZ</span>
-        </div>
-
-        <!-- User Profile Section -->
-        <div class="user-profile-section">
-            <div class="user-info" onclick="openProfileModal()" style="cursor: pointer;">
-                <div class="user-details" style="text-align: right;">
-                    <div class="user-name" id="headerUserName">Loading...</div>
-                    <div class="user-email" id="headerUserEmail">user@example.com</div>
-                </div>
-                <div class="user-avatar" id="headerAvatar">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-            </div>
-            <button onclick="logout()" class="logout-btn" title="Logout">
-                <i class="fa-solid fa-right-from-bracket"></i>
-            </button>
-        </div>
-    </header>
-
     <div class="app-container">
+        <header>
+            <div class="logo">
+                <span class="gradient-text" style="font-size: 1.5rem;">SpendZ</span>
+            </div>
 
-
-        <!-- Swipeable Dashboard Cards -->
-        <h3 style="margin-bottom: 15px; padding-left: 5px;">Dashboard Overview ↔️</h3>
-        <div class="swipe-scroll-wrapper dashboard-swipe">
-            <!-- Main Budget Display -->
-            <div class="glass-card budget-overview swipe-card">
-                <div class="balance-label">Remaining Balance</div>
-                <div class="balance-amount">₹<span id="total-balance">0</span></div>
-                <div class="budget-bars">
-                    <div class="budget-pill">
-                        <span>Daily Limit</span>
-                        <span id="daily-limit">₹0</span>
+            <!-- User Profile Section -->
+            <div class="user-profile-section">
+                <div class="user-info" onclick="openProfileModal()" style="cursor: pointer;">
+                    <div class="user-avatar" id="headerAvatar">
+                        <i class="fa-solid fa-user"></i>
                     </div>
-                    <div class="budget-pill">
-                        <span>Weekly Limit</span>
-                        <span id="weekly-limit">₹0</span>
-                    </div>
-                    <div class="budget-pill">
-                        <span>Monthly</span>
-                        <span id="monthly-limit">₹0</span>
+                    <div class="user-details">
+                        <div class="user-name" id="headerUserName">Loading...</div>
+                        <div class="user-email" id="headerUserEmail">user@example.com</div>
                     </div>
                 </div>
-
-                <!-- Set Budget Button -->
-                <button class="set-budget-btn" onclick="openBudgetModal()">
-                    <i class="fa-solid fa-wallet"></i>
-                    <span>Set Budget</span>
+                <button onclick="logout()" class="logout-btn" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span>
                 </button>
             </div>
+        </header>
 
+        <!-- Main Budget Display -->
+        <div class="glass-card budget-overview">
+            <div class="balance-label">Remaining Balance</div>
+            <div class="balance-amount">₹<span id="total-balance">0</span></div>
+            <div class="budget-bars">
+                <div class="budget-pill">
+                    <span>Daily Limit</span>
+                    <span id="daily-limit">₹0</span>
+                </div>
+                <div class="budget-pill">
+                    <span>Weekly Limit</span>
+                    <span id="weekly-limit">₹0</span>
+                </div>
+                <div class="budget-pill">
+                    <span>Monthly</span>
+                    <span id="monthly-limit">₹0</span>
+                </div>
+            </div>
+
+            <!-- Set Budget Button -->
+            <button class="set-budget-btn" onclick="openBudgetModal()">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Set Budget</span>
+            </button>
+        </div>
+
+        <!-- Smart Tip Section -->
+        <div class="glass-card tip-card">
+            <div class="tip-content">
+                <div class="tip-icon">💡</div>
+                <div>
+                    <h4 style="margin-bottom: 5px;">Money Vibe Check</h4>
+                    <p class="tip-text" style="font-size: 0.9rem; color: var(--text-secondary);">Set your budget to
+                        start tracking your spends like a pro!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expense Actions -->
+        <div class="tabs">
+            <div class="tab active" onclick="switchView('daily')">Daily</div>
+            <div class="tab" onclick="switchView('weekly')">Weekly</div>
+            <div class="tab" onclick="switchView('monthly')">Monthly</div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-grid">
             <!-- Spending by Category Chart -->
-            <div class="glass-card chart-card swipe-card">
+            <div class="glass-card chart-card">
                 <h3 style="margin-bottom: 20px;">💸 Spending by Category</h3>
                 <canvas id="categoryChart"></canvas>
             </div>
 
             <!-- Spending vs Budget Chart -->
-            <div class="glass-card chart-card swipe-card">
+            <div class="glass-card chart-card">
                 <h3 style="margin-bottom: 20px;">📊 Spending vs Budget</h3>
                 <canvas id="budgetChart"></canvas>
             </div>
+        </div>
 
-            <!-- Spending Trend Chart -->
-            <div class="glass-card chart-card swipe-card">
-                <h3 style="margin-bottom: 20px;">📈 Spending Trend</h3>
-                <canvas id="trendChart"></canvas>
+        <!-- Spending Trend Chart -->
+        <div class="glass-card">
+            <h3 style="margin-bottom: 20px;">📈 Spending Trend</h3>
+            <canvas id="trendChart"></canvas>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="transactions-list">
+            <h3 style="margin-bottom: 15px;">Recent Spends</h3>
+            <div id="expense-list">
+                <!-- Expenses will be injected here -->
+                <div style="text-align: center; color: var(--text-secondary); padding: 20px;">
+                    No spends yet. Go touch some grass... or buy something!
+                </div>
             </div>
         </div>
 
-    </div>
-
-    <!-- Smart Tip Section -->
-    <div class="glass-card tip-card" style="margin-top: 20px;">
-        <div class="tip-content">
-            <div class="tip-icon">💡</div>
-            <div>
-                <h4 style="margin-bottom: 5px;">Money Vibe Check</h4>
-                <p class="tip-text" style="font-size: 0.9rem; color: var(--text-secondary);">Set your budget to
-                    start tracking your spends like a pro!</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Expense Actions -->
-    <div class="tabs">
-        <div class="tab active" onclick="switchView('daily')">Daily</div>
-        <div class="tab" onclick="switchView('weekly')">Weekly</div>
-        <div class="tab" onclick="switchView('monthly')">Monthly</div>
-    </div>
-
-    <!-- Recent Transactions -->
-    <div class="transactions-list">
-        <h3 style="margin-bottom: 15px;">Recent Spends</h3>
-        <div id="expense-list">
-            <!-- Expenses will be injected here -->
-            <div style="text-align: center; color: var(--text-secondary); padding: 20px;">
-                No spends yet. Go touch some grass... or buy something!
-            </div>
-        </div>
-    </div>
-
-    <!-- Floating Action Button -->
-    <button class="fab" onclick="openExpenseModal()">
-        <i class="fa-solid fa-plus"></i>
-    </button>
+        <!-- Floating Action Button -->
+        <button class="fab" onclick="openExpenseModal()">
+            <i class="fa-solid fa-plus"></i>
+        </button>
     </div>
 
     <!-- Add Expense Modal -->

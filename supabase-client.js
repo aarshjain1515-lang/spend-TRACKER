@@ -1,9 +1,8 @@
 // Initialize Supabase Client
-// Automatically uses Vercel's environment variables
+// Using NEW Vercel Supabase Database
 
-// Vercel automatically injects these from your Supabase integration
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || window.location.origin;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+const supabaseUrl = 'https://yxuqkdrugtjktrhecdyv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4dXFrZHJ1Z3Rqa3RyaGVjZHl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4ODUyOTcsImV4cCI6MjA4NTQ2MTI5N30.P-gNYwBRlgr679TAdi7oNLgBPQMDEZqbGUJnWtGttFE';
 
 // Safe Initialization
 try {
@@ -11,13 +10,13 @@ try {
         console.error("❌ CRITICAL: Supabase SDK not loaded from CDN!");
         alert("System Error: Database connection library failed to load. Please refresh.");
     } else {
-        // Initialize with Vercel's environment variables
+        // Initialize
         const client = supabase.createClient(supabaseUrl, supabaseKey);
 
         // Assign to global window object
         window.supabase = client;
 
-        console.log("✅ Supabase Client Initialized (Vercel Integration)");
+        console.log("✅ Supabase Client Initialized (NEW Vercel Database)");
         console.log("URL:", supabaseUrl);
     }
 } catch (err) {

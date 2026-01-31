@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpendZ - Gen Z Expense Tracker</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+    <script>
+        // We will move auth check to app.js or keep simple check here
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                // Determine if we need to redirect
+                // specific logic can be handled in app.js
+            }
+        }
+        checkAuth();
+
+        function logout() {
+            localStorage.removeItem('spendzLoggedIn');
+            window.location.href = 'index.html';
+        }
+    </script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <span class="gradient-text" style="font-size: 1.5rem;">SpendZ</span>
+            </div>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <button onclick="logout()"
+                    style="background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem;"
+                    title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+                <div class="profile-icon" onclick="openProfileModal()" style="cursor: pointer;" title="My Profile">
+                    <i class="fa-solid fa-user-astronaut"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Budget Display -->
+        <div class="glass-card budget-overview">
+            <div class="balance-label">Remaining Balance</div>
+            <div class="balance-amount">₹<span id="total-balance">0</span></div>
+            <div class="budget-bars">
+                <div class="budget-pill">
+                    <span>Daily Limit</span>
+                    <span id="daily-limit">₹0</span>
+                </div>
+                <div class="budget-pill">
+                    <span>Weekly Limit</span>
+                    <span id="weekly-limit">₹0</span>
+                </div>
+                <div class="budget-pill">
+                    <span>Monthly</span>
+                    <span id="monthly-limit">₹0</span>
+                </div>
+            </div>
+            <button class="settings-btn" onclick="openBudgetModal()"
+                style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; color: white; opacity: 0.5; cursor: pointer;">
+                <i class="fa-solid fa-gear"></i>
+            </button>
+        </div>
+
+        <!-- Smart Tip Section -->
+        <div class="glass-card tip-card">
+            <div class="tip-content">
+                <div class="tip-icon">💡</div>
+                <div>
+                    <h4 style="margin-bottom: 5px;">Money Vibe Check</h4>
+                    <p class="tip-text" style="font-size: 0.9rem; color: var(--text-secondary);">Set your budget to
+                        start tracking your spends like a pro!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expense Actions -->
+        <div class="tabs">
+            <div class="tab active" onclick="switchView('daily')">Daily</div>
+            <div class="tab" onclick="switchView('weekly')">Weekly</div>
+            <div class="tab" onclick="switchView('monthly')">Monthly</div>
+        </div>
+
+        <!-- Stats Visualization -->
+        <div class="glass-card">
+            <h3 style="margin-bottom: 15px;">Spending Flow</h3>
+            <div style="height: 20px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; display: flex;"
+                id="visual-bar">
+                <!-- Javascript will populate this -->
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.8rem; color: var(--text-secondary);"
+                id="visual-legend">
+                <!-- Javascript will populate this -->
+            </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="transactions-list">
+            <h3 style="margin-bottom: 15px;">Recent Spends</h3>
+            <div id="expense-list">
+                <!-- Expenses will be injected here -->
+                <div style="text-align: center; color: var(--text-secondary); padding: 20px;">
+                    No spends yet. Go touch some grass... or buy something!
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Action Button -->
+        <button class="fab" onclick="openExpenseModal()">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </div>
+
+    <!-- Add Expense Modal -->
+    <div class="modal-overlay" id="expense-modal">
+        <div class="modal">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h3>Add New Spend</h3>
+                <button onclick="closeModal('expense-modal')"
+                    style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="expense-form">
+                <div class="form-group">
+                    <label>Amount (₹)</label>
+                    <input type="number" id="expense-amount" placeholder="0.00" required>
+                </div>
+                <div class="form-group">
+                    <label>What was it?</label>
+                    <input type="text" id="expense-title" placeholder="Coffee, Uber, etc." required>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="expense-category">
+                        <option value="food">🍔 Food & Dining</option>
+                        <option value="transport">🚗 Transport</option>
+                        <option value="entertainment">🎬 Entertainment</option>
+                        <option value="shopping">🛍️ Shopping</option>
+                        <option value="education">📚 Education</option>
+                        <option value="bills">💸 Bills & Recharge</option>
+                        <option value="other">🤷 Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="expense-date" required>
+                </div>
+                <button type="submit" class="btn-primary">Add Spend</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Set Budget Modal -->
+    <div class="modal-overlay" id="budget-modal">
+        <div class="modal">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h3>Set Your Budget</h3>
+                <button onclick="closeModal('budget-modal')"
+                    style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="budget-form">
+                <div class="form-group">
+                    <label>Monthly Budget (₹)</label>
+                    <input type="number" id="monthly-budget-input" placeholder="e.g. 5000" required>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 20px;">
+                    This will automatically calculate your daily and weekly safe-to-spend limits.
+                </p>
+                <button type="submit" class="btn-primary">Set Budget</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal-overlay" id="profile-modal">
+        <div class="modal">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h3>My Profile</h3>
+                <button onclick="closeModal('profile-modal')"
+                    style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Profile Picture Section -->
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div style="position: relative; width: 100px; height: 100px; margin: 0 auto;">
+                    <input type="file" id="profile-upload" accept="image/*" style="display: none;"
+                        onchange="handleImageUpload(this)">
+                    <div id="profile-pic-preview" onclick="document.getElementById('profile-upload').click()"
+                        style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #d946ef); display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; border: 3px solid rgba(255,255,255,0.1);">
+                        <i class="fa-solid fa-camera" style="font-size: 2rem; color: rgba(255,255,255,0.8);"></i>
+                    </div>
+                </div>
+                <p style="margin-top: 10px; color: var(--text-secondary); font-size: 0.85rem;">Tap circle to upload
+                    photo</p>
+            </div>
+
+            <form id="profile-form">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="profile-name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="profile-email" placeholder="your.email@college.edu" readonly
+                        style="opacity: 0.6;">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="profile-phone" placeholder="+91 1234567890">
+                </div>
+                <div class="form-group">
+                    <label>College/University</label>
+                    <input type="text" id="profile-college" placeholder="Your College Name">
+                </div>
+                <div class="form-group">
+                    <label>About Me</label>
+                    <textarea id="profile-bio" rows="3" placeholder="Tell us about yourself..."
+                        style="width: 100%; padding: 15px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: white; font-family: var(--font-body); resize: vertical; margin-bottom: 20px;"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Save Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js?v=3"></script>
+</body>
+
+</html>

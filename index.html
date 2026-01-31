@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpendZ - Login</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Link to the fresh CSS -->
+    <link rel="stylesheet" href="style.css?v=6">
+
+    <!-- Supabase SDK (Crucial for Database) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Visual Brand Side -->
+        <div class="visual-side">
+            <div class="visual-mesh"></div>
+            <div class="visual-content">
+                <h1 class="brand-title">SpendZ</h1>
+                <p class="brand-tagline">Master your college finances.</p>
+            </div>
+        </div>
+
+        <!-- Login Form Side -->
+        <div class="login-side">
+            <div class="login-container">
+                <div class="welcome-text">
+                    <h2>Welcome Back</h2>
+                    <p>Enter your details to access your dashboard.</p>
+                </div>
+
+                <!-- Google Sign In Button -->
+                <button class="btn btn-google" id="googleBtn" onclick="tryGoogleLogin()">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google"
+                        style="width: 20px; height: 20px;">
+                    Continue with Google
+                </button>
+
+                <div class="divider">
+                    <span>OR CONTINUE WITH EMAIL</span>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="emailInput" class="form-input" placeholder="name@university.edu">
+                </div>
+                <!-- Error Message Container -->
+                <div id="emailError" class="error-message">
+                    <i class="fa-solid fa-circle-exclamation"></i> Please enter a valid email address.
+                </div>
+
+                <div class="mb-6">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="passwordInput" class="form-input" placeholder="••••••••">
+                </div>
+
+                <button class="btn btn-primary" onclick="handleDirectLogin()">
+                    Sign In
+                </button>
+
+                <p style="margin-top: 1.5rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+                    Don't have an account? <a href="#" onclick="toggleSignUp()"
+                        style="color: var(--primary); text-decoration: none;">Sign up for free</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if already logged in
+        async function checkSession() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                window.location.replace('dashboard.html');
+            }
+        }
+        checkSession();
+
+        // login Function (Demo User Flow)
+        async function tryGoogleLogin() {
+            const btn = document.getElementById('googleBtn');
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Connecting...';
+            btn.disabled = true;
+
+            try {
+                const email = 'demo@spendz.com';
+                const password = 'password123';
+
+                // 1. Try to Login
+                let { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+
+                // 2. If User Not Found (Invalid login), Create Account
+                if (error && (error.message.includes('Invalid login') || error.message.includes('not found') || error.message.includes('password'))) {
+                    console.log("Creating demo account...");
+
+                    const signUp = await supabase.auth.signUp({
+                        email,
+                        password,
+                        options: { data: { full_name: 'Demo User' } }
+                    });
+
+                    if (signUp.error) throw signUp.error;
+
+                    // If login was successful via signup
+                    if (signUp.data.session) {
+                        data = signUp.data;
+                        error = null;
+                    } else {
+                        // Retry login
+                        const retry = await supabase.auth.signInWithPassword({ email, password });
+                        data = retry.data;
+                        error = retry.error;
+                    }
+                }
+
+                if (error) throw error;
+
+                console.log('✅ Logged in as Demo User');
+                localStorage.setItem('spendzLoggedIn', 'true');
+                window.location.href = 'dashboard.html';
+
+            } catch (err) {
+                console.error("❌ Login Error:", err);
+                btn.innerHTML = '<img src="https://www.svgrepo.com/show/475656/google-color.svg" style="width: 20px; height: 20px;"> Continue with Google';
+                btn.disabled = false;
+                alert('Login failed: ' + err.message);
+            }
+        }
+
+        function handleDirectLogin() {
+            const emailInput = document.getElementById('emailInput');
+            const passwordInput = document.getElementById('passwordInput');
+            const errorMsg = document.getElementById('emailError');
+            const btn = document.querySelector('.btn-primary');
+
+            // Reset Error
+            errorMsg.style.display = 'none';
+            emailInput.style.borderColor = 'rgba(255,255,255,0.1)';
+
+            // Validate
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if (!re.test(String(emailInput.value).toLowerCase())) {
+                errorMsg.style.display = 'block';
+                emailInput.style.borderColor = '#ef4444';
+                return;
+            }
+
+            if (passwordInput.value.length < 1) {
+                alert("Please enter a password");
+                return;
+            }
+
+            // Proceed to Login
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Authenticating...';
+
+            setTimeout(() => {
+                localStorage.setItem('spendzLoggedIn', 'true');
+                localStorage.setItem('spendzUserEmail', emailInput.value);
+                window.location.replace('dashboard.html');
+            }, 1000);
+        }
+
+        function toggleSignUp() {
+            const title = document.querySelector('.welcome-text h2');
+            const subtitle = document.querySelector('.welcome-text p');
+            const btn = document.querySelector('.btn-primary');
+            const link = document.querySelector('p a');
+
+            if (btn.innerText === 'Sign In') {
+                title.innerText = 'Create Account';
+                subtitle.innerText = 'Join the club & start tracking.';
+                btn.innerText = 'Sign Up';
+                link.innerText = 'Already have an account? Login';
+            } else {
+                title.innerText = 'Welcome Back';
+                subtitle.innerText = 'Enter your details to access your dashboard.';
+                btn.innerText = 'Sign In';
+                link.innerText = 'Sign up for free';
+            }
+        }
+
+        // Clear errors on typing
+        document.getElementById('emailInput').addEventListener('input', function () {
+            document.getElementById('emailError').style.display = 'none';
+            this.style.borderColor = 'rgba(255,255,255,0.1)';
+        });
+    </script>
+</body>
+
+</html>

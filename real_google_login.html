@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpendZ - Real Google Login</title>
+    <!-- Fonts & Icons -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=3">
+
+    <!-- 🔹 1. Google Identity Services Script -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="visual-side">
+            <div class="visual-mesh"></div>
+            <div class="visual-content">
+                <h1 class="brand-title">SpendZ</h1>
+                <p class="brand-tagline">Secure Login Mode</p>
+            </div>
+        </div>
+
+        <div class="login-side">
+            <div class="login-container">
+                <div class="welcome-text">
+                    <h2>Real Authentication</h2>
+                    <p style="color: #ef4444; font-size: 0.9rem;">
+                        ⚠️ Requires valid Client ID in code
+                    </p>
+                </div>
+
+                <!-- 🔹 2. The Official Google Button Container -->
+                <!-- PASTE YOUR CLIENT ID BELOW in data-client_id -->
+                <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID_HERE" data-context="signin"
+                    data-ux_mode="popup" data-callback="handleCredentialResponse" data-auto_prompt="false">
+                </div>
+
+                <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_black"
+                    data-text="continue_with_google" data-size="large" data-logo_alignment="left" data-width="100%">
+                </div>
+
+                <div class="divider"><span>OR</span></div>
+
+                <p class="text-center" style="color: grey; font-size: 0.8rem;">
+                    This page uses the official Google Identity Services.<br>
+                    It will verify your token with <b>server.js</b>.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 🔹 3. Handle the response from Google
+        async function handleCredentialResponse(response) {
+            console.log("Verified Token received from Google:", response.credential);
+
+            const btn = document.querySelector('.g_id_signin');
+
+            // Send the token to YOUR backend
+            try {
+                const res = await fetch('/api/auth/google', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: response.credential })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    console.log("Backend verification success!", data.user);
+
+                    // Save user info
+                    localStorage.setItem('spendzLoggedIn', 'true');
+                    localStorage.setItem('spendzUserEmail', data.user.email);
+                    localStorage.setItem('spendzUserName', data.user.name);
+                    localStorage.setItem('spendzUserPic', data.user.picture);
+
+                    // Redirect
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert("Login Failed: " + data.message);
+                }
+            } catch (err) {
+                console.error("Server Error:", err);
+                alert("Could not connect to backend server.");
+            }
+        }
+    </script>
+</body>
+
+</html>

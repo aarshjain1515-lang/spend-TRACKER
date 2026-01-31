@@ -17,7 +17,7 @@ const categories = {
 };
 
 const elements = {
-    budgetDisplay: document.querySelector('.balance-amount'),
+    budgetDisplay: document.getElementById('total-balance'),
     expenseList: document.querySelector('#expense-list'),
 
     // Modals
@@ -351,10 +351,11 @@ function renderExpenses() {
 }
 
 function updateBalance() {
+    if (!elements.budgetDisplay) return;
     const totalSpent = state.expenses.reduce((sum, item) => sum + Number(item.amount), 0);
     const budget = state.monthlyBudget || 0;
     const remaining = budget - totalSpent;
-    elements.budgetDisplay.innerText = `₹${remaining}`;
+    elements.budgetDisplay.innerText = remaining;
 }
 
 // === Global Helper Functions ===

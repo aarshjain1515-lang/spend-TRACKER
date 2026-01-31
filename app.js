@@ -426,3 +426,25 @@ function setupEventListeners() {
         });
     }
 }
+
+// === Dashboard Tab Switching ===
+window.switchDashboardTab = (viewId, event) => {
+    if (event) event.preventDefault();
+
+    // 1. Update Views
+    document.querySelectorAll('.dashboard-view').forEach(el => el.style.display = 'none');
+    const targetView = document.getElementById(`view-${viewId}`);
+    if (targetView) targetView.style.display = 'block';
+
+    // 2. Update Nav Links
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    // Find the link that was clicked or corresponds to viewId
+    if (event) {
+        event.currentTarget.classList.add('active');
+    }
+
+    // 3. Special Case: Analytics (Resize charts)
+    if (viewId === 'analytics') {
+        if (typeof updateCharts === 'function') setTimeout(updateCharts, 100);
+    }
+};

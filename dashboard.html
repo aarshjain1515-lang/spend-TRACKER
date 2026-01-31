@@ -15,6 +15,35 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="premium.css">
+    <style>
+        .dashboard-view {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-family: var(--font-heading);
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .section-subtitle {
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+        }
+    </style>
     <!-- Chart.js for Interactive Charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <!-- Supabase SDK -->
@@ -47,16 +76,16 @@
         </div>
 
         <div class="nav-links">
-            <a href="#" class="nav-item active">
+            <a href="#" class="nav-item active" onclick="switchDashboardTab('home', event)">
                 <i class="fa-solid fa-house"></i> Home
             </a>
-            <a href="#" class="nav-item">
+            <a href="#" class="nav-item" onclick="switchDashboardTab('analytics', event)">
                 <i class="fa-solid fa-chart-pie"></i> Analytics
             </a>
-            <a href="#" class="nav-item">
+            <a href="#" class="nav-item" onclick="switchDashboardTab('history', event)">
                 <i class="fa-solid fa-list"></i> History
             </a>
-            <a href="#" class="nav-item">
+            <a href="#" class="nav-item" onclick="switchDashboardTab('goals', event)">
                 <i class="fa-solid fa-bullseye"></i> Goals
             </a>
         </div>
@@ -74,82 +103,136 @@
 
     <div class="app-container premium-layout">
 
-        <!-- Hero Section (Drapels Style Text) -->
-        <div class="hero-section">
-            <h1 class="hero-title">Master Your <span class="gradient-text">Finances</span>.</h1>
-            <p class="hero-subtitle">Track every rupee, set smart budgets, and reach your financial goals faster.</p>
+        <!-- === HOME VIEW === -->
+        <div id="view-home" class="dashboard-view">
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <h1 class="hero-title">Master Your <span class="gradient-text">Finances</span>.</h1>
+                <p class="hero-subtitle">Track every rupee, set smart budgets, and reach your financial goals faster.
+                </p>
 
-            <div class="hero-balance-card">
-                <div class="balance-content">
-                    <span class="label">Total Balance</span>
-                    <h2 class="amount">₹<span id="total-balance">0</span></h2>
+                <div class="hero-balance-card">
+                    <div class="balance-content">
+                        <span class="label">Total Balance</span>
+                        <h2 class="amount">₹<span id="total-balance">0</span></h2>
+                    </div>
+                    <div class="hero-actions">
+                        <button class="action-btn primary" onclick="openExpenseModal()">
+                            <i class="fa-solid fa-plus"></i> Add Expense
+                        </button>
+                        <button class="action-btn secondary" onclick="openBudgetModal()">
+                            <i class="fa-solid fa-sliders"></i> Set Budget
+                        </button>
+                    </div>
                 </div>
-                <div class="hero-actions">
-                    <button class="action-btn primary" onclick="openExpenseModal()">
-                        <i class="fa-solid fa-plus"></i> Add Expense
-                    </button>
-                    <button class="action-btn secondary" onclick="openBudgetModal()">
-                        <i class="fa-solid fa-sliders"></i> Set Budget
-                    </button>
+
+                <div class="hero-stats">
+                    <div class="stat-pill">
+                        <span class="dot daily"></span> Daily Limit: <span id="daily-limit">₹0</span>
+                    </div>
+                    <div class="stat-pill">
+                        <span class="dot weekly"></span> Weekly Limit: <span id="weekly-limit">₹0</span>
+                    </div>
+                    <div class="stat-pill">
+                        <span class="dot monthly"></span> Monthly: <span id="monthly-limit">₹0</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="hero-stats">
-                <div class="stat-pill">
-                    <span class="dot daily"></span> Daily Limit: <span id="daily-limit">₹0</span>
+            <!-- Expense Actions -->
+            <div class="tabs" style="justify-content: center; margin-bottom: 2rem;">
+                <div class="tab active" onclick="switchView('daily')">Daily</div>
+                <div class="tab" onclick="switchView('weekly')">Weekly</div>
+                <div class="tab" onclick="switchView('monthly')">Monthly</div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="transactions-list">
+                <h3 style="margin-bottom: 15px;">Your Activity</h3>
+                <div id="expense-list">
+                    <div style="text-align: center; color: var(--text-secondary); padding: 20px;">
+                        No spends yet. Go touch some grass... or buy something!
+                    </div>
                 </div>
-                <div class="stat-pill">
-                    <span class="dot weekly"></span> Weekly Limit: <span id="weekly-limit">₹0</span>
+            </div>
+
+            <button class="fab" onclick="openExpenseModal()">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+
+        <!-- === ANALYTICS VIEW === -->
+        <div id="view-analytics" class="dashboard-view" style="display: none;">
+            <h2 class="section-title" style="margin-top: 0;">Analytics & Insights 📊</h2>
+            <p class="section-subtitle" style="text-align:left;">Visualize your spending habits.</p>
+
+            <div class="charts-grid">
+                <!-- Spending by Category Chart -->
+                <div class="glass-card chart-card">
+                    <h3 style="margin-bottom: 20px;">💸 Spending by Category</h3>
+                    <canvas id="categoryChart"></canvas>
                 </div>
-                <div class="stat-pill">
-                    <span class="dot monthly"></span> Monthly: <span id="monthly-limit">₹0</span>
+
+                <!-- Spending vs Budget Chart -->
+                <div class="glass-card chart-card">
+                    <h3 style="margin-bottom: 20px;">📊 Spending vs Budget</h3>
+                    <canvas id="budgetChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Spending Trend Chart -->
+            <div class="glass-card">
+                <h3 style="margin-bottom: 20px;">📈 Spending Trend</h3>
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+
+        <!-- === HISTORY VIEW === -->
+        <div id="view-history" class="dashboard-view" style="display: none;">
+            <h2 class="section-title" style="margin-top: 0;">Transaction History 📜</h2>
+            <div class="glass-card">
+                <div style="padding: 2rem; text-align: center; color: var(--text-gray);">
+                    <i class="fa-solid fa-clock-rotate-left"
+                        style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                    <p>Detailed history logs coming soon.</p>
+                    <p style="font-size: 0.9rem; opacity: 0.7;">Check "Home" for recent activity.</p>
                 </div>
             </div>
         </div>
 
-        <!-- Expense Actions -->
-        <div class="tabs">
-            <div class="tab active" onclick="switchView('daily')">Daily</div>
-            <div class="tab" onclick="switchView('weekly')">Weekly</div>
-            <div class="tab" onclick="switchView('monthly')">Monthly</div>
-        </div>
+        <!-- === GOALS VIEW === -->
+        <div id="view-goals" class="dashboard-view" style="display: none;">
+            <h2 class="section-title" style="margin-top: 0;">Savings Goals 🎯</h2>
 
-        <!-- Charts Section -->
-        <div class="charts-grid">
-            <!-- Spending by Category Chart -->
-            <div class="glass-card chart-card">
-                <h3 style="margin-bottom: 20px;">💸 Spending by Category</h3>
-                <canvas id="categoryChart"></canvas>
-            </div>
+            <div class="goals-grid"
+                style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-top: 20px;">
+                <div class="glass-card" style="text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 10px;">🏝️</div>
+                    <h3 style="margin-bottom: 5px;">Bali Trip</h3>
+                    <p style="color: var(--text-gray); margin-bottom: 15px;">Target: ₹50,000</p>
 
-            <!-- Spending vs Budget Chart -->
-            <div class="glass-card chart-card">
-                <h3 style="margin-bottom: 20px;">📊 Spending vs Budget</h3>
-                <canvas id="budgetChart"></canvas>
-            </div>
-        </div>
+                    <div
+                        style="background: rgba(255,255,255,0.1); height: 12px; border-radius: 10px; overflow: hidden; margin-bottom: 10px;">
+                        <div
+                            style="width: 40%; background: linear-gradient(90deg, var(--primary), var(--accent)); height: 100%;">
+                        </div>
+                    </div>
+                    <div
+                        style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-gray);">
+                        <span>₹20,000 saved</span>
+                        <span>40%</span>
+                    </div>
+                </div>
 
-        <!-- Spending Trend Chart -->
-        <div class="glass-card">
-            <h3 style="margin-bottom: 20px;">📈 Spending Trend</h3>
-            <canvas id="trendChart"></canvas>
-        </div>
-
-        <!-- Recent Transactions -->
-        <div class="transactions-list">
-            <h3 style="margin-bottom: 15px;">Recent Spends</h3>
-            <div id="expense-list">
-                <!-- Expenses will be injected here -->
-                <div style="text-align: center; color: var(--text-secondary); padding: 20px;">
-                    No spends yet. Go touch some grass... or buy something!
+                <div class="glass-card"
+                    style="text-align: center; border: 2px dashed rgba(255,255,255,0.1); display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; height: 100%; min-height: 250px;">
+                    <div style="font-size: 3rem; margin-bottom: 15px; color: var(--primary);"><i
+                            class="fa-solid fa-plus"></i></div>
+                    <h3 style="color: var(--text-gray);">Add Goal</h3>
                 </div>
             </div>
         </div>
 
-        <!-- Floating Action Button -->
-        <button class="fab" onclick="openExpenseModal()">
-            <i class="fa-solid fa-plus"></i>
-        </button>
     </div>
 
     <!-- Add Expense Modal -->

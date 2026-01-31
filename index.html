@@ -183,7 +183,8 @@
             }
         }
 
-        function handleDirectLogin() {
+
+        async function handleDirectLogin() {
             const emailInput = document.getElementById('emailInput');
             const passwordInput = document.getElementById('passwordInput');
             const errorMsg = document.getElementById('emailError');
@@ -201,19 +202,70 @@
                 return;
             }
 
-            if (passwordInput.value.length < 1) {
-                alert("Please enter a password");
+            if (passwordInput.value.length < 6) {
+                alert("Password must be at least 6 characters");
                 return;
             }
 
-            // Proceed to Login
+            // Proceed to Login with Supabase
             btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Authenticating...';
+            btn.disabled = true;
 
-            setTimeout(() => {
+            try {
+                const email = emailInput.value;
+                const password = passwordInput.value;
+
+                console.log('🔐 Manual login attempt:', email);
+
+                // Try to login
+                let result = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+
+                console.log('Login result:', {
+                    hasSession: !!result.data?.session,
+                    error: result.error?.message
+                });
+
+                // If user doesn't exist, create account
+                if (result.error && result.error.message.includes('Invalid login')) {
+                    console.log('User not found, creating account...');
+
+                    const signUpResult = await supabase.auth.signUp({
+                        email,
+                        password,
+                        options: { data: { full_name: email.split('@')[0] } }
+                    });
+
+                    if (signUpResult.error) throw signUpResult.error;
+
+                    if (signUpResult.data.session) {
+                        result = signUpResult;
+                    } else {
+                        alert('Account created! Please check your email to confirm (or disable email confirmation in Supabase settings)');
+                        btn.innerHTML = 'Sign In';
+                        btn.disabled = false;
+                        return;
+                    }
+                }
+
+                if (result.error) throw result.error;
+
+                if (!result.data.session) {
+                    throw new Error('No session created');
+                }
+
+                console.log('✅ Login successful!');
                 localStorage.setItem('spendzLoggedIn', 'true');
-                localStorage.setItem('spendzUserEmail', emailInput.value);
-                window.location.replace('dashboard.html');
-            }, 1000);
+                window.location.href = 'dashboard.html';
+
+            } catch (err) {
+                console.error('❌ Login failed:', err);
+                btn.innerHTML = 'Sign In';
+                btn.disabled = false;
+                alert('Login failed: ' + err.message);
+            }
         }
 
         function toggleSignUp() {

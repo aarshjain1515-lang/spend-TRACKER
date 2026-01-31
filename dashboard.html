@@ -38,29 +38,30 @@
 </head>
 
 <body>
-    <div class="app-container">
-        <header>
-            <div class="logo">
-                <span class="gradient-text" style="font-size: 1.5rem;">SpendZ</span>
-            </div>
+    <!-- Full Width Header -->
+    <header class="main-header">
+        <div class="logo">
+            <span class="gradient-text" style="font-size: 1.8rem; letter-spacing: -1px;">SpendZ</span>
+        </div>
 
-            <!-- User Profile Section -->
-            <div class="user-profile-section">
-                <div class="user-info" onclick="openProfileModal()" style="cursor: pointer;">
-                    <div class="user-avatar" id="headerAvatar">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                    <div class="user-details">
-                        <div class="user-name" id="headerUserName">Loading...</div>
-                        <div class="user-email" id="headerUserEmail">user@example.com</div>
-                    </div>
+        <!-- User Profile Section -->
+        <div class="user-profile-section">
+            <div class="user-info" onclick="openProfileModal()" style="cursor: pointer;">
+                <div class="user-details" style="text-align: right;">
+                    <div class="user-name" id="headerUserName">Loading...</div>
+                    <div class="user-email" id="headerUserEmail">user@example.com</div>
                 </div>
-                <button onclick="logout()" class="logout-btn" title="Logout">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    <span>Logout</span>
-                </button>
+                <div class="user-avatar" id="headerAvatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
             </div>
-        </header>
+            <button onclick="logout()" class="logout-btn" title="Logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="app-container">
 
         <!-- Main Budget Display -->
         <div class="glass-card budget-overview">

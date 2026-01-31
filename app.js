@@ -42,7 +42,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Load data and setup
     await loadExpenses();
     await loadProfile();
+    updateHeaderProfile(); // Update header with user info
     setupEventListeners();
+    renderExpenses();
+    updateBalance();
 });
 
 // === Helper: Ensure Auth ===
@@ -191,6 +194,34 @@ async function loadProfile() {
     } catch (err) {
         console.error('Error loading profile:', err.message);
 
+    }
+}
+
+// Update header with user info
+function updateHeaderProfile() {
+    if (!state.user) return;
+
+    const headerUserName = document.getElementById('headerUserName');
+    const headerUserEmail = document.getElementById('headerUserEmail');
+    const headerAvatar = document.getElementById('headerAvatar');
+
+    if (headerUserEmail) {
+        headerUserEmail.textContent = state.user.email || 'user@example.com';
+    }
+
+    // Try to get name from profile or use email username
+    const displayName = state.user.user_metadata?.full_name ||
+        state.user.email?.split('@')[0] ||
+        'User';
+
+    if (headerUserName) {
+        headerUserName.textContent = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+    }
+
+    // Update avatar with first letter
+    if (headerAvatar) {
+        const firstLetter = displayName.charAt(0).toUpperCase();
+        headerAvatar.innerHTML = `<span style="font-size: 1.3rem; font-weight: 700;">${firstLetter}</span>`;
     }
 }
 

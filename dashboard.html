@@ -41,15 +41,22 @@
             <div class="logo">
                 <span class="gradient-text" style="font-size: 1.5rem;">SpendZ</span>
             </div>
-            <div style="display: flex; gap: 15px; align-items: center;">
-                <button onclick="logout()"
-                    style="background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem;"
-                    title="Logout">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                </button>
-                <div class="profile-icon" onclick="openProfileModal()" style="cursor: pointer;" title="My Profile">
-                    <i class="fa-solid fa-user-astronaut"></i>
+
+            <!-- User Profile Section -->
+            <div class="user-profile-section">
+                <div class="user-info" onclick="openProfileModal()" style="cursor: pointer;">
+                    <div class="user-avatar" id="headerAvatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <div class="user-name" id="headerUserName">Loading...</div>
+                        <div class="user-email" id="headerUserEmail">user@example.com</div>
+                    </div>
                 </div>
+                <button onclick="logout()" class="logout-btn" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                </button>
             </div>
         </header>
 

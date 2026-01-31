@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupEventListeners();
     renderExpenses();
     updateBalance();
+    initializeCharts(); // Initialize all charts
 });
 
 // === Helper: Ensure Auth ===
@@ -78,6 +79,7 @@ async function loadExpenses() {
         state.expenses = data || [];
         renderExpenses();
         updateBalance();
+        if (typeof updateCharts === 'function') updateCharts();
     } catch (err) {
         console.error('Error loading expenses:', err.message);
     }
@@ -121,6 +123,7 @@ async function handleAddExpense(e) {
         state.expenses.unshift(data[0]);
         renderExpenses();
         updateBalance();
+        if (typeof updateCharts === 'function') updateCharts();
         closeModal('expense-modal');
         elements.addForm.reset();
 
@@ -146,6 +149,7 @@ async function deleteExpense(id) {
         state.expenses = state.expenses.filter(e => e.id !== id);
         renderExpenses();
         updateBalance();
+        if (typeof updateCharts === 'function') updateCharts();
 
     } catch (err) {
         alert('Error deleting: ' + err.message);
@@ -412,6 +416,7 @@ function setupEventListeners() {
 
                 closeModal('budget-modal');
                 updateBalance();
+                if (typeof updateCharts === 'function') updateCharts();
                 alert('✅ Budget updated successfully!');
             } catch (err) {
                 console.error('Error updating budget:', err);

@@ -949,6 +949,22 @@ header {
     transform: translateY(-1px);
 }
 
+/* === Charts Section === */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.chart-card {
+    min-height: 300px;
+}
+
+.chart-card canvas {
+    max-height: 250px;
+}
+
 /* === Landing Page Sections === */
 
 /* Section Container */

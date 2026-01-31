@@ -14,6 +14,8 @@
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <!-- Chart.js for Interactive Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-client.js"></script>
@@ -105,17 +107,25 @@
             <div class="tab" onclick="switchView('monthly')">Monthly</div>
         </div>
 
-        <!-- Stats Visualization -->
+        <!-- Charts Section -->
+        <div class="charts-grid">
+            <!-- Spending by Category Chart -->
+            <div class="glass-card chart-card">
+                <h3 style="margin-bottom: 20px;">💸 Spending by Category</h3>
+                <canvas id="categoryChart"></canvas>
+            </div>
+
+            <!-- Spending vs Budget Chart -->
+            <div class="glass-card chart-card">
+                <h3 style="margin-bottom: 20px;">📊 Spending vs Budget</h3>
+                <canvas id="budgetChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Spending Trend Chart -->
         <div class="glass-card">
-            <h3 style="margin-bottom: 15px;">Spending Flow</h3>
-            <div style="height: 20px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; display: flex;"
-                id="visual-bar">
-                <!-- Javascript will populate this -->
-            </div>
-            <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.8rem; color: var(--text-secondary);"
-                id="visual-legend">
-                <!-- Javascript will populate this -->
-            </div>
+            <h3 style="margin-bottom: 20px;">📈 Spending Trend</h3>
+            <canvas id="trendChart"></canvas>
         </div>
 
         <!-- Recent Transactions -->
@@ -248,6 +258,7 @@
         </div>
     </div>
 
+    <script src="charts.js"></script>
     <script src="app.js?v=3"></script>
 </body>
 

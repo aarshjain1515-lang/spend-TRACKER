@@ -1129,6 +1129,34 @@ header {
     transition: all 0.3s ease;
 }
 
+/* === Dashboard Swipe Cards === */
+.dashboard-swipe {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.swipe-card {
+    min-width: 320px;
+    max-width: 400px;
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+    margin-bottom: 0 !important;
+    /* Override standard card margin */
+    height: auto;
+}
+
+/* Ensure chart canvas fits */
+.swipe-card canvas {
+    max-height: 250px;
+    width: 100% !important;
+}
+
+@media (min-width: 768px) {
+    .swipe-card {
+        min-width: 380px;
+    }
+}
+
 .faq-item:hover {
     border-color: var(--accent-3);
 }

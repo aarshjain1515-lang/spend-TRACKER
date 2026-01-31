@@ -372,7 +372,7 @@
                 const emailError = document.getElementById('emailError');
                 const emailErrorText = document.getElementById('emailErrorText');
                 emailErrorText.textContent = message;
-                emailError.style.display = 'flex';
+                emle.display = 'flex';
             }
         }
 
@@ -395,103 +395,36 @@
                 toggleIcon.classList.add('fa-eye-slash');
             } else {
                 passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.remove('fa-eye-slash');
                 toggleIcon.classList.add('fa-eye');
             }
         }
 
         // === Login Functions ===
 
-        // login Function (Demo User Flow) - DEBUG VERSION
+        // Google Login (Real OAuth)
         async function tryGoogleLogin() {
-            const btn = document.getElementById('googleBtn');
+    const btn = document.getElementById('googleBtn');
+            const originalContent = btn.innerHTML;
             btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Connecting...';
             btn.disabled = true;
 
-            console.log('=== LOGIN START ===');
-
             try {
-                const email = 'demo@spendz.com';
-                const password = 'password123';
-
-                // 1. Try to Login
-                console.log('Step 1: Trying to login...');
-                let result = await supabase.auth.signInWithPassword({
-                    email,
-                    password
-                });
-
-                console.log('Login result:', {
-                    hasSession: !!result.data?.session,
-                    hasUser: !!result.data?.user,
-                    errorMsg: result.error?.message
-                });
-
-                // 2. If User Not Found, Create Account
-                if (result.error) {
-                    console.log('Step 2: Login failed, creating account...');
-                    console.log('Error was:', result.error.message);
-
-                    const signUpResult = await supabase.auth.signUp({
-                        email,
-                        password,
-                        options: { data: { full_name: 'Demo User' } }
-                    });
-
-                    console.log('Signup result:', {
-                        hasSession: !!signUpResult.data?.session,
-                        hasUser: !!signUpResult.data?.user,
-                        errorMsg: signUpResult.error?.message
-                    });
-
-                    if (signUpResult.error) {
-                        console.error('Signup failed:', signUpResult.error);
-                        throw signUpResult.error;
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: window.location.href.split('#')[0].replace('index.html', '').replace(/\/$/, '') + '/dashboard.html'
                     }
-
-                    // Check if we got a session
-                    if (signUpResult.data.session) {
-                        console.log('✅ Got session from signup!');
-                        result = signUpResult;
-                    } else if (signUpResult.data.user && !signUpResult.data.session) {
-                        console.error('⚠️ User created but NO SESSION!');
-                        console.error('This means email confirmation is STILL ON');
-                        alert('Email confirmation is STILL enabled in Supabase!\n\nDouble check:\nAuthentication > Providers > Email > "Confirm email" = OFF');
-                        btn.innerHTML = '<img src="https://www.svgrepo.com/show/475656/google-color.svg" style="width: 20px; height: 20px;"> Continue with Google';
-                        btn.disabled = false;
-                        return;
-                    } else {
-                        console.log('Step 3: Retrying login...');
-                        result = await supabase.auth.signInWithPassword({ email, password });
-                        console.log('Retry result:', {
-                            hasSession: !!result.data?.session,
-                            errorMsg: result.error?.message
-                        });
-                    }
-                }
-
-                if (result.error) {
-                    console.error('Final error:', result.error);
-                    throw result.error;
-                }
-
-                if (!result.data.session) {
-                    console.error('❌ NO SESSION in final result!');
-                    throw new Error('No session - check Supabase email confirmation settings');
-                }
-
-                console.log('✅ SUCCESS! Redirecting...');
-                console.log('Session user ID:', result.data.session.user.id);
-                console.log('=== LOGIN END ===');
-
-                localStorage.setItem('spendzLoggedIn', 'true');
-                window.location.href = 'dashboard.html';
-
+                });
+                
+                if (error) throw error;
+                
+                // Supabase will handle the redirect
             } catch (err) {
-                console.error("❌ LOGIN FAILED:", err);
-                btn.innerHTML = '<img src="https://www.svgrepo.com/show/475656/google-color.svg" style="width: 20px; height: 20px;"> Continue with Google';
+                console.error("Google Login Error:", err);
+                alert("Google Login Error: " + err.message);
+                btn.innerHTML = originalContent;
                 btn.disabled = false;
-                alert('Login failed: ' + err.message + '\n\nOpen console (F12) for details');
             }
         }
 

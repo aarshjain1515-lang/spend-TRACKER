@@ -14,6 +14,7 @@
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="premium.css">
     <!-- Chart.js for Interactive Charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <!-- Supabase SDK -->
@@ -38,64 +39,70 @@
 </head>
 
 <body>
-    <div class="app-container">
-        <header>
-            <div class="logo">
-                <span class="gradient-text" style="font-size: 1.5rem;">SpendZ</span>
-            </div>
-
-            <!-- User Profile Section -->
-            <div class="user-profile-section">
-                <div class="user-info" onclick="openProfileModal()" style="cursor: pointer;">
-                    <div class="user-avatar" id="headerAvatar">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                    <div class="user-details">
-                        <div class="user-name" id="headerUserName">Loading...</div>
-                        <div class="user-email" id="headerUserEmail">user@example.com</div>
-                    </div>
-                </div>
-                <button onclick="logout()" class="logout-btn" title="Logout">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    <span>Logout</span>
-                </button>
-            </div>
-        </header>
-
-        <!-- Main Budget Display -->
-        <div class="glass-card budget-overview">
-            <div class="balance-label">Remaining Balance</div>
-            <div class="balance-amount">₹<span id="total-balance">0</span></div>
-            <div class="budget-bars">
-                <div class="budget-pill">
-                    <span>Daily Limit</span>
-                    <span id="daily-limit">₹0</span>
-                </div>
-                <div class="budget-pill">
-                    <span>Weekly Limit</span>
-                    <span id="weekly-limit">₹0</span>
-                </div>
-                <div class="budget-pill">
-                    <span>Monthly</span>
-                    <span id="monthly-limit">₹0</span>
-                </div>
-            </div>
-
-            <!-- Set Budget Button -->
-            <button class="set-budget-btn" onclick="openBudgetModal()">
-                <i class="fa-solid fa-wallet"></i>
-                <span>Set Budget</span>
-            </button>
+    <!-- Premium Top Navigation (Drapels Style) -->
+    <nav class="premium-nav">
+        <div class="nav-brand">
+            <div class="brand-icon">⚡</div>
+            <span>SpendZ</span>
         </div>
 
-        <!-- Smart Tip Section -->
-        <div class="glass-card tip-card">
-            <div class="tip-content">
-                <div class="tip-icon">💡</div>
-                <div>
-                    <h4 style="margin-bottom: 5px;">Money Vibe Check</h4>
-                    <p class="tip-text" style="font-size: 0.9rem; color: var(--text-secondary);">Set your budget to
-                        start tracking your spends like a pro!</p>
+        <div class="nav-links">
+            <a href="#" class="nav-item active">
+                <i class="fa-solid fa-house"></i> Home
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-chart-pie"></i> Analytics
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-list"></i> History
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-bullseye"></i> Goals
+            </a>
+        </div>
+
+        <div class="nav-profile">
+            <div class="profile-pill" onclick="openProfileModal()">
+                <div class="avatar-small" id="headerAvatar">U</div>
+                <span id="headerUserName">User</span>
+            </div>
+            <button onclick="logout()" class="logout-icon-btn">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="app-container premium-layout">
+
+        <!-- Hero Section (Drapels Style Text) -->
+        <div class="hero-section">
+            <h1 class="hero-title">Master Your <span class="gradient-text">Finances</span>.</h1>
+            <p class="hero-subtitle">Track every rupee, set smart budgets, and reach your financial goals faster.</p>
+
+            <div class="hero-balance-card">
+                <div class="balance-content">
+                    <span class="label">Total Balance</span>
+                    <h2 class="amount">₹<span id="total-balance">0</span></h2>
+                </div>
+                <div class="hero-actions">
+                    <button class="action-btn primary" onclick="openExpenseModal()">
+                        <i class="fa-solid fa-plus"></i> Add Expense
+                    </button>
+                    <button class="action-btn secondary" onclick="openBudgetModal()">
+                        <i class="fa-solid fa-sliders"></i> Set Budget
+                    </button>
+                </div>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat-pill">
+                    <span class="dot daily"></span> Daily Limit: <span id="daily-limit">₹0</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="dot weekly"></span> Weekly Limit: <span id="weekly-limit">₹0</span>
+                </div>
+                <div class="stat-pill">
+                    <span class="dot monthly"></span> Monthly: <span id="monthly-limit">₹0</span>
                 </div>
             </div>
         </div>

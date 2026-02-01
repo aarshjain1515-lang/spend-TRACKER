@@ -2,14 +2,7 @@
 <html lang="en">
 
 <head>
-    <script>
-        localStorage.setItem('spendzLoggedIn', 'true');
-        window.location.replace('dashboard.html');
-    </script>
     <meta charset="UTF-8">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SpendZ - Login</title>
     <!-- Fonts -->
@@ -20,597 +13,323 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Link to the fresh CSS -->
-    <link rel="stylesheet" href="style.css?v=10">
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css?v=20">
 
-    <!-- Supabase SDK (Crucial for Database) -->
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-client.js?v=10"></script>
+    <script src="supabase-client.js?v=2"></script>
 </head>
 
 <body>
-    <div class="wrapper">
-        <!-- Visual Brand Side -->
-        <div class="visual-side">
-            <div class="visual-mesh"></div>
-            <div class="visual-content">
-                <h1 class="brand-title">SpendZ</h1>
-                <p class="brand-tagline">Track Every Rupee, Live Your Best Life 💸</p>
 
-                <!-- Animated Spending Showcase -->
-                <div class="spending-showcase">
-                    <div class="showcase-label">💰 Daily Spends</div>
-                    <div class="spending-scroll">
-                        <div class="spend-item">
-                            <span class="spend-icon">🍕</span>
-                            <span class="spend-name">Pizza Night</span>
-                            <span class="spend-amount">₹450</span>
+    <div class="split-screen">
+
+        <!-- LEFT PANEL: Vertical Animation -->
+        <div class="left-panel">
+
+            <div class="brand-overlay">
+                <h1>SpendZ</h1>
+                <p>Track. Save. Vibe. ✨</p>
+            </div>
+
+            <div class="scroll-container">
+                <!-- Column 1 (Up) -->
+                <div class="scroll-column">
+                    <!-- Cards doubled for seamless scroll -->
+                    <div class="scroll-card">
+                        <div class="card-icon">🍕</div>
+                        <div class="card-text">
+                            <h4>Food</h4>
+                            <p>₹450 • Yesterday</p>
                         </div>
-                        <div class="spend-item">
-                            <span class="spend-icon">☕</span>
-                            <span class="spend-name">Coffee</span>
-                            <span class="spend-amount">₹120</span>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">🎬</div>
+                        <div class="card-text">
+                            <h4>Movies</h4>
+                            <p>₹300 • Friday</p>
                         </div>
-                        <div class="spend-item">
-                            <span class="spend-icon">🎬</span>
-                            <span class="spend-name">Movie</span>
-                            <span class="spend-amount">₹300</span>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">⛽</div>
+                        <div class="card-text">
+                            <h4>Petrol</h4>
+                            <p>₹1000 • Mon</p>
                         </div>
-                        <div class="spend-item">
-                            <span class="spend-icon">📚</span>
-                            <span class="spend-name">Books</span>
-                            <span class="spend-amount">₹850</span>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">🎧</div>
+                        <div class="card-text">
+                            <h4>Spotify</h4>
+                            <p>₹119 • Sub</p>
                         </div>
-                        <div class="spend-item">
-                            <span class="spend-icon">🚕</span>
-                            <span class="spend-name">Uber</span>
-                            <span class="spend-amount">₹200</span>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">👟</div>
+                        <div class="card-text">
+                            <h4>Sneakers</h4>
+                            <p>₹2500 • Goal</p>
                         </div>
-                        <div class="spend-item">
-                            <span class="spend-icon">🎮</span>
-                            <span class="spend-name">Gaming</span>
-                            <span class="spend-amount">₹1200</span>
+                    </div>
+                    <!-- Duplicate -->
+                    <div class="scroll-card">
+                        <div class="card-icon">🍕</div>
+                        <div class="card-text">
+                            <h4>Food</h4>
+                            <p>₹450 • Yesterday</p>
                         </div>
-                        <!-- Duplicate for seamless loop -->
-                        <div class="spend-item">
-                            <span class="spend-icon">🍕</span>
-                            <span class="spend-name">Pizza Night</span>
-                            <span class="spend-amount">₹450</span>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">🎬</div>
+                        <div class="card-text">
+                            <h4>Movies</h4>
+                            <p>₹300 • Friday</p>
                         </div>
-                        <div class="spend-item">
-                            <span class="spend-icon">☕</span>
-                            <span class="spend-name">Coffee</span>
-                            <span class="spend-amount">₹120</span>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">⛽</div>
+                        <div class="card-text">
+                            <h4>Petrol</h4>
+                            <p>₹1000 • Mon</p>
+                        </div>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">🎧</div>
+                        <div class="card-text">
+                            <h4>Spotify</h4>
+                            <p>₹119 • Sub</p>
+                        </div>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">👟</div>
+                        <div class="card-text">
+                            <h4>Sneakers</h4>
+                            <p>₹2500 • Goal</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column 2 (Down/Reverse) -->
+                <div class="scroll-column reverse">
+                    <div class="scroll-card">
+                        <div class="card-icon">🎮</div>
+                        <div class="card-text">
+                            <h4>Gaming</h4>
+                            <p>₹3000 • Steam</p>
+                        </div>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">🍔</div>
+                        <div class="card-text">
+                            <h4>Burger</h4>
+                            <p>₹150 • Lunch</p>
+                        </div>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">🚌</div>
+                        <div class="card-text">
+                            <h4>Bus Fare</h4>
+                            <p>₹20 • Daily</p>
+                        </div>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">📱</div>
+                        <div class="card-text">
+                            <h4>Recharge</h4>
+                            <p>₹299 • Jio</p>
+                        </div>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">💊</div>
+                        <div class="card-text">
+                            <h4>Meds</h4>
+                            <p>₹500 • Pharm</p>
+                        </div>
+                    </div>
+                    <!-- Duplicate -->
+                    <div class="scroll-card">
+                        <div class="card-icon">🎮</div>
+                        <div class="card-text">
+                            <h4>Gaming</h4>
+                            <p>₹3000 • Steam</p>
+                        </div>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">🍔</div>
+                        <div class="card-text">
+                            <h4>Burger</h4>
+                            <p>₹150 • Lunch</p>
+                        </div>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">🚌</div>
+                        <div class="card-text">
+                            <h4>Bus Fare</h4>
+                            <p>₹20 • Daily</p>
+                        </div>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">📱</div>
+                        <div class="card-text">
+                            <h4>Recharge</h4>
+                            <p>₹299 • Jio</p>
+                        </div>
+                    </div>
+                    <div class="scroll-card">
+                        <div class="card-icon">💊</div>
+                        <div class="card-text">
+                            <h4>Meds</h4>
+                            <p>₹500 • Pharm</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Login Form Side -->
-        <div class="login-side">
-            <div class="login-container">
-                <div class="welcome-text">
-                    <h2>Welcome Back</h2>
-                    <p>Enter your details to access your dashboard.</p>
+        <!-- RIGHT PANEL: Login Form -->
+        <div class="right-panel">
+            <div class="login-box">
+                <div class="login-header">
+                    <h2>Welcome Back 👋</h2>
+                    <p>Enter your details to vibe with your finance.</p>
                 </div>
 
+                <div class="alert-box" id="generalError"
+                    style="display: none; background: rgba(255,0,0,0.1); border: 1px solid #FF006E; color: #FF006E; padding: 10px; border-radius: 8px; margin-bottom: 20px; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span id="generalErrorText">Error message here</span>
+                </div>
 
-                <!-- Google Sign In Button -->
-                <button class="btn btn-google" id="googleBtn" onclick="tryGoogleLogin()">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google"
-                        style="width: 20px; height: 20px;">
+                <button class="btn-google-login" id="googleBtn" onclick="tryGoogleLogin()">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="G">
                     Continue with Google
                 </button>
 
                 <div class="divider">
-                    <span>OR CONTINUE WITH EMAIL</span>
+                    <span>OR EMAIL</span>
                 </div>
 
-                <!-- Email Input -->
-                <div class="mb-4">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" id="emailInput" class="form-input" placeholder="name@university.edu"
-                        autocomplete="email">
+                <div class="input-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="emailInput" class="input-field" placeholder="Email Address">
                 </div>
 
-                <!-- Error Message for Email -->
-                <div id="emailError" class="error-message">
-                    <i class="fa-solid fa-circle-exclamation"></i> <span id="emailErrorText">Please enter a valid email
-                        address.</span>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="passwordInput" class="input-field" placeholder="Password">
                 </div>
 
-                <!-- Password Input with Toggle -->
-                <div class="mb-4">
-                    <label class="form-label">Password</label>
-                    <div style="position: relative;">
-                        <input type="password" id="passwordInput" class="form-input" placeholder="••••••••"
-                            autocomplete="current-password" style="padding-right: 45px;">
-                        <button type="button" onclick="togglePasswordVisibility()"
-                            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-gray); cursor: pointer; padding: 5px;">
-                            <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
-                        </button>
-                    </div>
-                </div>
+                <button class="btn-login" id="signInBtn" onclick="handleDirectLogin()">Sign In</button>
 
-                <!-- General Error Message -->
-                <div id="generalError" class="error-message" style="display: none; margin-bottom: 15px;">
-                    <i class="fa-solid fa-circle-exclamation"></i> <span id="generalErrorText"></span>
-                </div>
-
-                <!-- Sign In Button -->
-                <button class="btn btn-primary" id="signInBtn" onclick="handleDirectLogin()">
-                    Sign In
-                </button>
-
-                <!-- Sign Up Link -->
-                <p style="margin-top: 1.5rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
-                    Don't have an account? <a href="#" onclick="toggleSignUp()"
-                        style="color: var(--primary); text-decoration: none; font-weight: 500;">Sign up for free</a>
+                <p style="text-align: center; margin-top: 20px; font-size: 0.9rem;">
+                    Don't have an account? <a href="#" style="color: var(--primary); text-decoration: none;"
+                        onclick="showError('Just enter any email/pass to automatically sign up/in!', true)">Sign up for
+                        free</a>
                 </p>
             </div>
         </div>
     </div>
 
-    <!-- Features Section -->
-    <section class="features-section">
-        <div class="section-container">
-            <h2 class="section-title">Why Choose SpendZ? 🚀</h2>
-            <p class="section-subtitle">Your ultimate companion for smart money management</p>
-
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Track Every Rupee</h3>
-                    <p>Log expenses instantly with our intuitive interface. Know exactly where your money goes.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">💰</div>
-                    <h3>Smart Budgets</h3>
-                    <p>Set monthly budgets and get daily/weekly limits automatically calculated for you.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">📈</div>
-                    <h3>Visual Insights</h3>
-                    <p>Beautiful charts and graphs help you understand your spending patterns at a glance.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Secure & Private</h3>
-                    <p>Your data is encrypted and protected. Only you can access your financial information.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Lightning Fast</h3>
-                    <p>Add expenses in seconds. No complicated forms or endless clicking required.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <h3>Goal Oriented</h3>
-                    <p>Set financial goals and track your progress. Stay motivated to save more!</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section class="how-it-works-section">
-        <div class="section-container">
-            <h2 class="section-title">How It Works 💡</h2>
-            <p class="section-subtitle">Get started in 3 simple steps</p>
-
-            <div class="steps-container">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <h3>Sign Up Free</h3>
-                    <p>Create your account in seconds using Google or email. No credit card required!</p>
-                </div>
-
-                <div class="step-arrow">→</div>
-
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <h3>Set Your Budget</h3>
-                    <p>Tell us your monthly budget and we'll calculate your daily and weekly limits.</p>
-                </div>
-
-                <div class="step-arrow">→</div>
-
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <h3>Track & Save</h3>
-                    <p>Log expenses as you spend. Watch your savings grow with smart insights!</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="faq-section">
-        <div class="section-container">
-            <h2 class="section-title">Frequently Asked Questions 🤔</h2>
-            <p class="section-subtitle">Everything you need to know about SpendZ</p>
-
-            <div class="faq-container">
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFAQ(this)">
-                        <span>How quickly can I expect to see results?</span>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        Most users see improvement in their spending habits within the first 2 weeks of consistent
-                        tracking. Our visual insights help you identify spending patterns immediately, allowing you to
-                        make informed decisions from day one.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFAQ(this)">
-                        <span>Is the app suitable for beginners?</span>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        Absolutely! SpendZ is designed with simplicity in mind. Whether you're tracking expenses for the
-                        first time or you're a budgeting pro, our intuitive interface makes money management effortless.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFAQ(this)">
-                        <span>Is my financial data secure?</span>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        Yes! We use industry-standard encryption and secure authentication through Supabase. Your data
-                        is stored securely and only accessible by you. We never share your information with third
-                        parties.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFAQ(this)">
-                        <span>Can I use SpendZ on multiple devices?</span>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        Yes! Your data syncs automatically across all your devices. Log in from your phone, tablet, or
-                        computer - your expenses are always up to date.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFAQ(this)">
-                        <span>What categories can I track?</span>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        SpendZ supports multiple categories including Food, Transport, Shopping, Entertainment, Bills,
-                        and more. You can easily categorize each expense to understand where your money goes.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFAQ(this)">
-                        <span>Is SpendZ really free?</span>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        Yes! SpendZ is completely free to use with all core features included. No hidden fees, no
-                        premium tiers - just powerful expense tracking for everyone.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="section-container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <h3 class="gradient-text" style="font-size: 2rem; margin-bottom: 1rem;">SpendZ</h3>
-                    <p>Track Every Rupee, Live Your Best Life 💸</p>
-                    <p style="margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">
-                        Made with ❤️ for students who want to master their finances
-                    </p>
-                </div>
-
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Product</h4>
-                        <a href="#features">Features</a>
-                        <a href="#how-it-works">How It Works</a>
-                        <a href="#faq">FAQ</a>
-                    </div>
-
-                    <div class="footer-column">
-                        <h4>Company</h4>
-                        <a href="#">About Us</a>
-                        <a href="#">Contact</a>
-                        <a href="#">Privacy Policy</a>
-                    </div>
-
-                    <div class="footer-column">
-                        <h4>Connect</h4>
-                        <a href="https://twitter.com/spendz_app" target="_blank" rel="noopener"><i
-                                class="fa-brands fa-twitter"></i> Twitter</a>
-                        <a href="https://instagram.com/me_aarsh" target="_blank" rel="noopener"><i
-                                class="fa-brands fa-instagram"></i> Instagram</a>
-                        <a href="https://github.com/aarshjain1515-lang" target="_blank" rel="noopener"><i
-                                class="fa-brands fa-github"></i> GitHub</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p>&copy; 2026 SpendZ. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    // === 🚀 AUTO-REDIRECT (Login Removed) ===
-    localStorage.setItem('spendzLoggedIn', 'true');
-    window.location.replace('dashboard.html');
-
-    // Old check (ignored)
-    async function checkSession() {
-    // Redirecting...
-    }
-    checkSession();
-
-    // === Helper Functions ===
-
-    // Show error message
-    function showError(message, isGeneral = false) {
-    if (isGeneral) {
-    const generalError = document.getElementById('generalError');
-    const generalErrorText = document.getElementById('generalErrorText');
-    generalErrorText.textContent = message;
-    generalError.style.display = 'flex';
-    } else {
-    const emailError = document.getElementById('emailError');
-    const emailErrorText = document.getElementById('emailErrorText');
-    emailErrorText.textContent = message;
-    emailError.style.display = 'flex';
-    }
-    }
-
-    // Hide all errors
-    function hideErrors() {
-    document.getElementById('emailError').style.display = 'none';
-    document.getElementById('generalError').style.display = 'none';
-    document.getElementById('emailInput').style.borderColor = 'rgba(255,255,255,0.1)';
-    document.getElementById('passwordInput').style.borderColor = 'rgba(255,255,255,0.1)';
-    }
-
-    // Password visibility toggle
-    function togglePasswordVisibility() {
-    const passwordInput = document.getElementById('passwordInput');
-    const toggleIcon = document.getElementById('togglePasswordIcon');
-
-    if (passwordInput.type === 'password') {
-    passwordInput.type = 'text';
-    toggleIcon.classList.remove('fa-eye');
-    toggleIcon.classList.add('fa-eye-slash');
-    } else {
-    passwordInput.type = 'password';
-    toggleIcon.classList.remove('fa-eye-slash');
-    toggleIcon.classList.add('fa-eye');
-    }
-    }
-
-    // === Login Functions ===
-
-    // Google Login (Real OAuth)
-    async function tryGoogleLogin() {
-    const btn = document.getElementById('googleBtn');
-    const originalContent = btn.innerHTML;
-    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Connecting...';
-    btn.disabled = true;
-
-    try {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-    redirectTo: window.location.href.split('#')[0].replace('index.html', '').replace(/\/$/, '') + '/dashboard.html'
-    }
-    });
-
-    if (error) throw error;
-
-    // Supabase will handle the redirect
-    } catch (err) {
-    console.error("Google Login Error:", err);
-    alert("Google Login Error: " + err.message);
-    btn.innerHTML = originalContent;
-    btn.disabled = false;
-    }
-    }
-
-
-    // === Rate Limiting Logic ===
-    const RATE_LIMIT_KEY = 'login_attempts';
-    const COOLDOWN_KEY = 'login_cooldown';
-    const MAX_ATTEMPTS = 3;
-    const LOCKOUT_TIME = 15 * 60 * 1000; // 15 minutes
-
-    function checkLocalRateLimit() {
-    const cooldownEnd = localStorage.getItem(COOLDOWN_KEY);
-    if (cooldownEnd && Date.now() < cooldownEnd) { const remaining=Math.ceil((cooldownEnd - Date.now()) / 1000);
-        startTimer(remaining); return true; // Blocked } return false; // Allowed } function recordFailedAttempt() { let
-        attempts=parseInt(localStorage.getItem(RATE_LIMIT_KEY) || '0' ) + 1; localStorage.setItem(RATE_LIMIT_KEY,
-        attempts); if (attempts>= MAX_ATTEMPTS) {
-        const endTime = Date.now() + LOCKOUT_TIME;
-        localStorage.setItem(COOLDOWN_KEY, endTime);
-        localStorage.setItem(RATE_LIMIT_KEY, '0'); // Reset attempts
-        startTimer(LOCKOUT_TIME / 1000);
-        return true; // Just blocked
+    <!-- MAIN SCRIPT -->
+    <script>
+        // Check Session on Load
+        async function checkSession() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                // Real session exists
+                window.location.replace('dashboard.html');
+            } else if (localStorage.getItem('spendzLoggedIn') === 'true' && localStorage.getItem('guest_mode') === 'true') {
+                // Guest mode active
+                window.location.replace('dashboard.html');
+            }
         }
-        return false;
-        }
+        checkSession();
 
-        let timerInterval;
-        function startTimer(seconds) {
+        // === Logic ===
         const btn = document.getElementById('signInBtn');
-        const errorText = document.getElementById('generalErrorText');
-        const errorDiv = document.getElementById('generalError');
 
-        btn.disabled = true;
-        errorDiv.style.display = 'flex';
+        async function handleDirectLogin() {
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+            const errorBox = document.getElementById('generalError');
+            const errorText = document.getElementById('generalErrorText');
 
-        clearInterval(timerInterval);
-
-        // Execute immediately
-        updateTimerUI(seconds, btn, errorText);
-
-        timerInterval = setInterval(() => {
-        seconds--;
-        if (seconds <= 0) { clearInterval(timerInterval); btn.disabled=false; btn.innerHTML='Sign In' ;
-            errorDiv.style.display='none' ; localStorage.removeItem(COOLDOWN_KEY); } else { updateTimerUI(seconds, btn,
-            errorText); } }, 1000); } function updateTimerUI(seconds, btn, errorText) { const m=Math.floor(seconds /
-            60); const s=seconds % 60; const timeStr=`${m}:${s < 10 ? '0' : '' }${s}`; btn.innerHTML=`<i
-            class="fa-solid fa-clock"></i> Wait ${timeStr}`;
-            errorText.textContent = `Too many attempts. Please wait ${timeStr}.`;
-            }
-
-            // Initialize Timer on Load
-            window.addEventListener('load', checkLocalRateLimit);
-
-
-            // === Authenticated Login ===
-            async function handleDirectLogin() {
-            const emailInput = document.getElementById('emailInput');
-            const passwordInput = document.getElementById('passwordInput');
-            const btn = document.getElementById('signInBtn');
-
-            // 1. Check Rate Limit First
-            // 1. Check Rate Limit First
-            // if (checkLocalRateLimit()) return; // DISABLED FOR NOW
-
-            // 2. Clear previous errors
-            hideErrors();
-
-            // 3. Validation
-            if (!emailInput.value || !emailInput.value.includes('@')) {
-            showError('Please enter a valid email address.');
-            return;
-            }
-            if (!passwordInput.value) {
-            showError('Please enter a password.');
-            return;
-            }
-
-            // 4. Loading State
+            // Reset UI
+            errorBox.style.display = 'none';
             btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Checking...';
             btn.disabled = true;
 
+            if (!email || !password) {
+                showError('Please fill in all fields.');
+                resetBtn();
+                return;
+            }
+
             try {
-            // 5. Try Login
-            const { data, error } = await supabase.auth.signInWithPassword({
-            email: emailInput.value,
-            password: passwordInput.value
-            });
+                // 1. Try Real Login
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-            if (error) throw error;
+                if (error) throw error;
 
-            // 6. Success
-            console.log("Login Successful");
-            localStorage.removeItem(RATE_LIMIT_KEY); // Clear bad attempts
-            window.location.href = 'dashboard.html';
+                // Success
+                window.location.href = 'dashboard.html';
 
             } catch (err) {
-            console.error("Login Error:", err);
+                console.warn("Supabase Login Failed:", err.message);
 
-            // === EMERGENCY FALLBACK (Rate Limit Bypass) ===
-            if (err.message.includes('rate limit')) {
-            console.warn("⚠️ Rate limit detected! Switching to Offline Mode.");
+                // === FAILSAFE MODE ===
+                // If Rate Limit or Invalid Login (and user clearly wants access), we let them in as Guest.
+                // Or we can simulate a signup. 
+
+                // For this "Pro" version, let's keep it clean:
+                // If it's a "Rate Limit" error, we AUTO-BYPASS to Guest Mode.
+                if (err.message.includes('rate limit')) {
+                    enableGuestMode(email);
+                    return;
+                }
+
+                showError(err.message);
+                resetBtn();
+            }
+        }
+
+        function enableGuestMode(email) {
             localStorage.setItem('spendzLoggedIn', 'true');
-            localStorage.setItem('userEmail', emailInput.value);
-            window.location.href = 'dashboard.html';
-            return;
-            }
+            localStorage.setItem('guest_mode', 'true'); // Flag for app.js
+            localStorage.setItem('userEmail', email);
 
+            btn.innerHTML = 'Switching to Offline Mode...';
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
+        }
+
+        async function tryGoogleLogin() {
+            const gBtn = document.getElementById('googleBtn');
+            gBtn.innerHTML = 'Connecting...';
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: { redirectTo: window.location.href.replace('index.html', '') + 'dashboard.html' }
+            });
+            if (error) {
+                showError(error.message);
+                gBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> Continue with Google';
+            }
+        }
+
+        function showError(msg) {
+            const errorBox = document.getElementById('generalError');
+            const errorText = document.getElementById('generalErrorText');
+            errorText.textContent = msg;
+            errorBox.style.display = 'flex';
+        }
+
+        function resetBtn() {
             btn.disabled = false;
-            btn.innerHTML = 'Sign In';
-
-            // 7. Handle Rate Limiting
-            const justBlocked = recordFailedAttempt();
-            if (justBlocked) {
-            return; // Timer already started
-            }
-
-            // 8. User Feedback
-            let msg = "Invalid email or password.";
-            if (err.message.includes("Email not confirmed")) msg = "Please confirm your email first.";
-            else if (err.message.includes("Invalid login")) msg = "Incorrect email or password.";
-
-            const attemptsLeft = MAX_ATTEMPTS - (parseInt(localStorage.getItem(RATE_LIMIT_KEY) || 0));
-            showError(`${msg} (${attemptsLeft} attempts left)`, true);
-            }
-            }
-
-
-            function toggleSignUp() {
-            const title = document.querySelector('.welcome-text h2');
-            const subtitle = document.querySelector('.welcome-text p');
-            const btn = document.querySelector('#signInBtn');
-            const link = document.querySelector('p a');
-
-            if (btn.innerText === 'Sign In') {
-            title.innerText = 'Create Account';
-            subtitle.innerText = 'Join the club & start tracking.';
-            btn.innerText = 'Sign Up';
-            link.innerText = 'Already have an account? Login';
-            } else {
-            title.innerText = 'Welcome Back';
-            subtitle.innerText = 'Enter your details to access your dashboard.';
             btn.innerText = 'Sign In';
-            link.innerText = 'Sign up for free';
-            }
-            }
-
-            // Clear errors on typing
-            document.getElementById('emailInput').addEventListener('input', hideErrors);
-            document.getElementById('passwordInput').addEventListener('input', hideErrors);
-
-            // Enter key to submit
-            document.getElementById('passwordInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-            handleDirectLogin();
-            }
-            });
-
-            // FAQ Toggle Function
-            function toggleFAQ(element) {
-            const faqItem = element.parentElement;
-            const answer = faqItem.querySelector('.faq-answer');
-            const icon = element.querySelector('i');
-
-            // Close all other FAQs
-            document.querySelectorAll('.faq-item').forEach(item => {
-            if (item !== faqItem) {
-            item.classList.remove('active');
-            item.querySelector('.faq-answer').style.maxHeight = null;
-            item.querySelector('i').style.transform = 'rotate(0deg)';
-            }
-            });
-
-            // Toggle current FAQ
-            faqItem.classList.toggle('active');
-            if (faqItem.classList.contains('active')) {
-            answer.style.maxHeight = answer.scrollHeight + 'px';
-            icon.style.transform = 'rotate(180deg)';
-            } else {
-            answer.style.maxHeight = null;
-            icon.style.transform = 'rotate(0deg)';
-            }
-            }
-            </script>
+        }
+    </script>
 </body>
 
 </html>

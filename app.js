@@ -216,10 +216,7 @@ async function loadProfile() {
     if (state.user.id.startsWith('guest_')) {
         const localBudget = localStorage.getItem('guest_budget');
         state.monthlyBudget = localBudget ? parseFloat(localBudget) : 0;
-
-        if (state.monthlyBudget) {
-            updateBudgetUI(state.monthlyBudget);
-        }
+        if (state.monthlyBudget) updateBudgetUI(state.monthlyBudget);
         return;
     }
 
@@ -233,33 +230,54 @@ async function loadProfile() {
         if (error && error.code !== 'PGRST116') throw error; // Ignore Not Found
 
         if (data) {
-            // Populate Form
+            // Existing Profile
             document.getElementById('profile-email').value = state.user.email;
             document.getElementById('profile-name').value = data.full_name || '';
             document.getElementById('profile-phone').value = data.phone || '';
             document.getElementById('profile-college').value = data.college || '';
             document.getElementById('profile-bio').value = data.bio || '';
-
-            // Store budget in state
             state.monthlyBudget = data.monthly_budget || 0;
 
-            // Update budget display
-            if (data.monthly_budget) {
-                updateBudgetUI(data.monthly_budget);
+            if (data.monthly_budget) updateBudgetUI(data.monthly_budget);
+            if (data.avatar_url) updateAvatarUI(data.avatar_url);
+
+            // Force Header Update with DB Name
+            if (data.full_name) {
+                document.getElementById('headerUserName').textContent = data.full_name.split(' ')[0];
+                const firstLetter = data.full_name.charAt(0).toUpperCase();
+                const avatarEl = document.getElementById('headerAvatar');
+                if (avatarEl && !data.avatar_url) avatarEl.innerHTML = `<span style="font-size: 1.3rem; font-weight: 700;">${firstLetter}</span>`;
             }
 
-            // Update Avatar
-            if (data.avatar_url) {
-                updateAvatarUI(data.avatar_url);
-            }
         } else {
-            document.getElementById('profile-email').value = state.user.email;
-            state.monthlyBudget = 0;
-        }
+            // === NEW USER DETECTED: Auto-Create Profile ===
+            const derivedName = state.user.email.split('@')[0];
+            const formattedName = derivedName.charAt(0).toUpperCase() + derivedName.slice(1);
 
+            console.log("Creating new profile for:", formattedName);
+
+            const { error: insertError } = await supabase
+                .from('profiles')
+                .insert([{
+                    id: state.user.id,
+                    email: state.user.email,
+                    full_name: formattedName,
+                    monthly_budget: 0
+                }]);
+
+            if (!insertError) {
+                document.getElementById('profile-email').value = state.user.email;
+                document.getElementById('profile-name').value = formattedName;
+                document.getElementById('headerUserName').textContent = formattedName;
+
+                const avatarEl = document.getElementById('headerAvatar');
+                if (avatarEl) avatarEl.innerHTML = `<span style="font-size: 1.3rem; font-weight: 700;">${formattedName.charAt(0)}</span>`;
+
+                alert(`Welcome, ${formattedName}! We set up your profile.`);
+            }
+        }
     } catch (err) {
         console.error('Error loading profile:', err.message);
-
     }
 }
 

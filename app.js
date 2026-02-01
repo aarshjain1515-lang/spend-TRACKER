@@ -89,6 +89,7 @@ async function loadExpenses() {
         const { data, error } = await supabase
             .from('expenses')
             .select('*')
+            .eq('user_id', state.user.id) // <--- CRITICAL FIX: Only specific user's data
             .order('date', { ascending: false });
 
         if (error) throw error;

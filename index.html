@@ -212,12 +212,14 @@
 
                 <div class="input-group">
                     <i class="fa-solid fa-envelope"></i>
-                    <input type="email" id="emailInput" class="input-field" placeholder="Email Address">
+                    <input type="email" id="emailInput" class="input-field" placeholder="Email Address" name="email"
+                        autocomplete="username">
                 </div>
 
                 <div class="input-group">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="passwordInput" class="input-field" placeholder="Password">
+                    <input type="password" id="passwordInput" class="input-field" placeholder="Password" name="password"
+                        autocomplete="current-password">
                 </div>
 
                 <button class="btn-login" id="signInBtn" onclick="handleDirectLogin()">Sign In</button>
@@ -308,12 +310,15 @@
         async function tryGoogleLogin() {
             const gBtn = document.getElementById('googleBtn');
             gBtn.innerHTML = 'Connecting...';
-            const { error } = await supabase.auth.signInWithOAuth({
-                provider: 'google',
-                options: { redirectTo: window.location.href.replace('index.html', '') + 'dashboard.html' }
-            });
-            if (error) {
-                showError(error.message);
+            try {
+                const { error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: { redirectTo: window.location.href.replace('index.html', '') + 'dashboard.html' }
+                });
+                if (error) throw error;
+            } catch (err) {
+                console.error("Google Auth Error:", err);
+                showError("Google Login Failed: " + err.message);
                 gBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> Continue with Google';
             }
         }

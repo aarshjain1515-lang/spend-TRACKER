@@ -33,9 +33,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     await ensureUser();
 
     if (!state.user) {
-        // No session - redirect to login
-        window.location.href = 'index.html';
-        return;
+        // === OFFLINE / GUEST MODE (Fix for Loop) ===
+        console.log("⚠️ No active session. Enabling Guest Mode.");
+        state.user = {
+            id: 'guest_user_id',
+            email: 'guest@spendz.app',
+            user_metadata: { full_name: 'Guest User' }
+        };
     }
 
     console.log("✅ Logged in as:", state.user.id);

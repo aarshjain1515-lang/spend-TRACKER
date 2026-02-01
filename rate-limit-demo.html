@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate Limit Fix Demo - SpendZ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0d0221 0%, #1a0b2e 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00f5ff, #ff006e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+        }
+
+        .demo-section {
+            background: rgba(26, 11, 46, 0.8);
+            border: 2px solid rgba(0, 245, 255, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .demo-section h2 {
+            color: #00f5ff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .before,
+        .after {
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid;
+        }
+
+        .before {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .after {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .before h3 {
+            color: #ef4444;
+            margin-bottom: 15px;
+        }
+
+        .after h3 {
+            color: #22c55e;
+            margin-bottom: 15px;
+        }
+
+        .error-demo {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .button-demo {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .button-normal {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+        }
+
+        .button-disabled {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            cursor: not-allowed;
+        }
+
+        .button-disabled i {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: #22c55e;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .test-btn {
+            background: linear-gradient(135deg, #00f5ff, #8338ec);
+            color: white;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            font-size: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .test-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #00f5ff;
+        }
+
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎯 Rate Limit Fix - Demo</h1>
+
+        <div class="demo-section">
+            <h2><i class="fa-solid fa-bug"></i> Problem Fixed</h2>
+            <p>The "email rate limit exceeded" error now has a live countdown timer and disabled buttons!</p>
+        </div>
+
+        <div class="demo-section">
+            <h2><i class="fa-solid fa-code-compare"></i> Before vs After</h2>
+            <div class="comparison">
+                <div class="before">
+                    <h3>❌ Before</h3>
+                    <div class="error-demo">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>email rate limit exceeded</span>
+                    </div>
+                    <button class="button-demo button-normal">Sign In</button>
+                    <ul style="margin-top: 15px; color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+                        <li>❌ No countdown timer</li>
+                        <li>❌ Button still enabled</li>
+                        <li>❌ No indication of wait time</li>
+                        <li>❌ User keeps trying</li>
+                    </ul>
+                </div>
+
+                <div class="after">
+                    <h3>✅ After</h3>
+                    <div class="error-demo">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>Too many login attempts. Please wait 4:32 before trying again.</span>
+                    </div>
+                    <button class="button-demo button-disabled">
+                        <i class="fa-solid fa-clock"></i>
+                        Wait 4:32
+                    </button>
+                    <ul style="margin-top: 15px; color: rgba(255,255,255,0.7); font-size: 0.9rem;">
+                        <li>✅ Live countdown timer</li>
+                        <li>✅ Button disabled</li>
+                        <li>✅ Clear wait time shown</li>
+                        <li>✅ Auto-recovery</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2><i class="fa-solid fa-list-check"></i> New Features</h2>
+            <ul class="feature-list">
+                <li><strong>Live Countdown:</strong> Shows exact time remaining (MM:SS format)</li>
+                <li><strong>Disabled Buttons:</strong> Both Sign In and Google buttons disabled during cooldown</li>
+                <li><strong>Persistent State:</strong> Timer survives page refreshes (localStorage)</li>
+                <li><strong>Visual Feedback:</strong> Pulsing clock icon animation</li>
+                <li><strong>Auto-Recovery:</strong> Buttons re-enable automatically when timer expires</li>
+                <li><strong>Better Messages:</strong> Clear, user-friendly error text</li>
+            </ul>
+        </div>
+
+        <div class="demo-section">
+            <h2><i class="fa-solid fa-code"></i> How It Works</h2>
+            <p style="margin-bottom: 15px;">When rate limit is detected:</p>
+            <ol style="margin-left: 20px; line-height: 1.8;">
+                <li>Store timestamp: <code>localStorage.setItem('rateLimitEnd', Date.now() + 300000)</code></li>
+                <li>Start countdown interval (updates every 1 second)</li>
+                <li>Update button: <code>"⏰ Wait 4:59"</code></li>
+                <li>Update error: <code>"Please wait 4:59 before trying again"</code></li>
+                <li>Disable both login buttons</li>
+                <li>When timer reaches 0:00 → Auto-enable everything</li>
+            </ol>
+        </div>
+
+        <div class="demo-section">
+            <h2><i class="fa-solid fa-flask"></i> Test It Yourself</h2>
+            <p style="margin-bottom: 15px;">To trigger the rate limit and see the countdown:</p>
+            <ol style="margin-left: 20px; line-height: 1.8; margin-bottom: 20px;">
+                <li>Go to the login page</li>
+                <li>Make 5+ failed login attempts quickly</li>
+                <li>Watch the countdown timer appear</li>
+                <li>Try refreshing the page (timer persists!)</li>
+                <li>Wait for it to reach 0:00 and auto-recover</li>
+            </ol>
+
+            <button class="test-btn" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-arrow-right"></i> Go to Login Page
+            </button>
+        </div>
+
+        <div class="demo-section" style="background: rgba(251, 191, 36, 0.1); border-color: rgba(251, 191, 36, 0.3);">
+            <h2 style="color: #fbbf24;"><i class="fa-solid fa-lightbulb"></i> Important Notes</h2>
+            <ul style="margin-left: 20px; line-height: 1.8; color: rgba(255,255,255,0.9);">
+                <li><strong>Rate Limit Duration:</strong> 5 minutes (300 seconds)</li>
+                <li><strong>Triggered By:</strong> Too many failed login attempts in short time</li>
+                <li><strong>Security Feature:</strong> This is a Supabase protection against brute force attacks</li>
+                <li><strong>Cache:</strong> Clear browser cache (<code>Ctrl + Shift + R</code>) to see changes</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; color: rgba(255,255,255,0.5);">
+            <p>✅ Rate Limit Error - FIXED!</p>
+            <p style="margin-top: 10px;">Last Updated: 2026-02-01</p>
+        </div>
+    </div>
+</body>
+
+</html>

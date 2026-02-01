@@ -1,8 +1,8 @@
 // Initialize Supabase Client
 // Using NEW Vercel Supabase Database
 
-const supabaseUrl = 'https://dgpobgmnjtxnteiegutq.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRncG9iZ21uanR4bnRlaWVndXRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4Nzk1MjMsImV4cCI6MjA4NTQ1NTUyM30.6pj64r3xrFA8njYz4MyW8NFWQb2bFFTXoFDosq0HsCQ';
+const supabaseUrl = 'https://jstlvbwfxbvlwlqgcjoc.supabase.co';
+const supabaseKey = 'sb_publishable_bXZWS6C8zyI3pfJA02vqHg_B_dxDOJS';
 
 // Safe Initialization
 try {

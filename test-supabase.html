@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Connection Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .test-section h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .info {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔌 Supabase Connection Test</h1>
+
+        <div class="test-section">
+            <h3>1. SDK Loading</h3>
+            <div id="sdkStatus" class="status loading">⏳ Checking...</div>
+        </div>
+
+        <div class="test-section">
+            <h3>2. Client Initialization</h3>
+            <div id="clientStatus" class="status loading">⏳ Checking...</div>
+            <div id="clientInfo" class="info"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>3. Database Connection</h3>
+            <div id="dbStatus" class="status loading">⏳ Testing...</div>
+            <div id="dbInfo" class="info"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>4. Authentication Status</h3>
+            <div id="authStatus" class="status loading">⏳ Checking...</div>
+            <div id="authInfo" class="info"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>5. Test Results</h3>
+            <div id="testResults"></div>
+        </div>
+
+        <button class="btn" onclick="runTests()">🔄 Run Tests Again</button>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+
+    <script>
+        async function runTests() {
+            console.clear();
+            console.log('🧪 Starting Supabase Connection Tests...\n');
+
+            // Test 1: SDK Loading
+            testSDKLoading();
+
+            // Test 2: Client Initialization
+            testClientInit();
+
+            // Test 3: Database Connection
+            await testDatabaseConnection();
+
+            // Test 4: Authentication
+            await testAuthentication();
+
+            // Final Results
+            showFinalResults();
+        }
+
+        function testSDKLoading() {
+            const sdkStatus = document.getElementById('sdkStatus');
+
+            if (typeof supabase !== 'undefined') {
+                sdkStatus.className = 'status success';
+                sdkStatus.textContent = '✅ Supabase SDK loaded successfully';
+                console.log('✅ Test 1: SDK Loading - PASSED');
+            } else {
+                sdkStatus.className = 'status error';
+                sdkStatus.textContent = '❌ Supabase SDK not loaded';
+                console.error('❌ Test 1: SDK Loading - FAILED');
+            }
+        }
+
+        function testClientInit() {
+            const clientStatus = document.getElementById('clientStatus');
+            const clientInfo = document.getElementById('clientInfo');
+
+            if (window.supabase) {
+                clientStatus.className = 'status success';
+                clientStatus.textContent = '✅ Supabase client initialized';
+
+                const url = 'https://dgpobgmnjtxnteiegutq.supabase.co';
+                clientInfo.innerHTML = `
+                    <strong>Project URL:</strong> ${url}<br>
+                    <strong>Project ID:</strong> dgpobgmnjtxnteiegutq
+                `;
+                console.log('✅ Test 2: Client Initialization - PASSED');
+                console.log('   URL:', url);
+            } else {
+                clientStatus.className = 'status error';
+                clientStatus.textContent = '❌ Client not initialized';
+                console.error('❌ Test 2: Client Initialization - FAILED');
+            }
+        }
+
+        async function testDatabaseConnection() {
+            const dbStatus = document.getElementById('dbStatus');
+            const dbInfo = document.getElementById('dbInfo');
+
+            try {
+                console.log('🔍 Test 3: Testing database connection...');
+
+                // Try to query profiles table
+                const { data, error, count } = await window.supabase
+                    .from('profiles')
+                    .select('*', { count: 'exact', head: true });
+
+                if (error) {
+                    // Check if error is because table doesn't exist
+                    if (error.message.includes('relation') && error.message.includes('does not exist')) {
+                        dbStatus.className = 'status error';
+                        dbStatus.textContent = '⚠️ Connected but tables not created';
+                        dbInfo.innerHTML = `
+                            <strong>Issue:</strong> Database tables don't exist yet<br>
+                            <strong>Action:</strong> Run the SQL setup code in Supabase dashboard
+                        `;
+                        console.warn('⚠️ Test 3: Database Connection - Tables not found');
+                    } else {
+                        throw error;
+                    }
+                } else {
+                    dbStatus.className = 'status success';
+                    dbStatus.textContent = '✅ Database connected successfully';
+                    dbInfo.innerHTML = `
+                        <strong>Profiles table:</strong> Found<br>
+                        <strong>Status:</strong> Ready to use
+                    `;
+                    console.log('✅ Test 3: Database Connection - PASSED');
+                }
+            } catch (err) {
+                dbStatus.className = 'status error';
+                dbStatus.textContent = '❌ Database connection failed';
+                dbInfo.innerHTML = `<strong>Error:</strong> ${err.message}`;
+                console.error('❌ Test 3: Database Connection - FAILED');
+                console.error('   Error:', err);
+            }
+        }
+
+        async function testAuthentication() {
+            const authStatus = document.getElementById('authStatus');
+            const authInfo = document.getElementById('authInfo');
+
+            try {
+                console.log('🔍 Test 4: Checking authentication...');
+
+                const { data: { session }, error } = await window.supabase.auth.getSession();
+
+                if (error) throw error;
+
+                if (session) {
+                    authStatus.className = 'status success';
+                    authStatus.textContent = '✅ User is logged in';
+                    authInfo.innerHTML = `
+                        <strong>Email:</strong> ${session.user.email}<br>
+                        <strong>User ID:</strong> ${session.user.id}
+                    `;
+                    console.log('✅ Test 4: Authentication - User logged in');
+                    console.log('   Email:', session.user.email);
+                } else {
+                    authStatus.className = 'status success';
+                    authStatus.textContent = '✅ Auth working (no user logged in)';
+                    authInfo.innerHTML = '<strong>Status:</strong> Not logged in (this is normal)';
+                    console.log('✅ Test 4: Authentication - Working (no session)');
+                }
+            } catch (err) {
+                authStatus.className = 'status error';
+                authStatus.textContent = '❌ Authentication check failed';
+                authInfo.innerHTML = `<strong>Error:</strong> ${err.message}`;
+                console.error('❌ Test 4: Authentication - FAILED');
+                console.error('   Error:', err);
+            }
+        }
+
+        function showFinalResults() {
+            const testResults = document.getElementById('testResults');
+
+            const allStatuses = document.querySelectorAll('.status');
+            let passed = 0;
+            let failed = 0;
+            let warnings = 0;
+
+            allStatuses.forEach(status => {
+                if (status.className.includes('success')) passed++;
+                else if (status.className.includes('error')) {
+                    if (status.textContent.includes('⚠️')) warnings++;
+                    else failed++;
+                }
+            });
+
+            let resultHTML = '';
+            let resultClass = '';
+
+            if (failed === 0 && warnings === 0) {
+                resultClass = 'success';
+                resultHTML = `
+                    <div class="status success">
+                        <strong>🎉 All Tests Passed!</strong><br>
+                        Supabase is fully connected and ready to use.
+                    </div>
+                `;
+            } else if (failed === 0 && warnings > 0) {
+                resultClass = 'error';
+                resultHTML = `
+                    <div class="status error">
+                        <strong>⚠️ Setup Incomplete</strong><br>
+                        Connection works but database tables need to be created.<br>
+                        Run the SQL code in Supabase dashboard.
+                    </div>
+                `;
+            } else {
+                resultClass = 'error';
+                resultHTML = `
+                    <div class="status error">
+                        <strong>❌ Connection Issues</strong><br>
+                        ${failed} test(s) failed. Check the details above.
+                    </div>
+                `;
+            }
+
+            testResults.innerHTML = resultHTML;
+
+            console.log('\n📊 Final Results:');
+            console.log(`   ✅ Passed: ${passed}`);
+            console.log(`   ⚠️ Warnings: ${warnings}`);
+            console.log(`   ❌ Failed: ${failed}`);
+        }
+
+        // Run tests on page load
+        window.addEventListener('load', () => {
+            setTimeout(runTests, 500);
+        });
+    </script>
+</body>
+
+</html>

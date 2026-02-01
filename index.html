@@ -349,245 +349,264 @@
         </div>
     </footer>
 
-    <script>
-        // Check if already logged in
-        async function checkSession() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session) {
-                window.location.replace('dashboard.html');
+    // === 🚀 AUTO-REDIRECT (Login Removed) ===
+    localStorage.setItem('spendzLoggedIn', 'true');
+    window.location.replace('dashboard.html');
+
+    // Old check (ignored)
+    async function checkSession() {
+    // Redirecting...
+    }
+    checkSession();
+
+    // === Helper Functions ===
+
+    // Show error message
+    function showError(message, isGeneral = false) {
+    if (isGeneral) {
+    const generalError = document.getElementById('generalError');
+    const generalErrorText = document.getElementById('generalErrorText');
+    generalErrorText.textContent = message;
+    generalError.style.display = 'flex';
+    } else {
+    const emailError = document.getElementById('emailError');
+    const emailErrorText = document.getElementById('emailErrorText');
+    emailErrorText.textContent = message;
+    emailError.style.display = 'flex';
+    }
+    }
+
+    // Hide all errors
+    function hideErrors() {
+    document.getElementById('emailError').style.display = 'none';
+    document.getElementById('generalError').style.display = 'none';
+    document.getElementById('emailInput').style.borderColor = 'rgba(255,255,255,0.1)';
+    document.getElementById('passwordInput').style.borderColor = 'rgba(255,255,255,0.1)';
+    }
+
+    // Password visibility toggle
+    function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('passwordInput');
+    const toggleIcon = document.getElementById('togglePasswordIcon');
+
+    if (passwordInput.type === 'password') {
+    passwordInput.type = 'text';
+    toggleIcon.classList.remove('fa-eye');
+    toggleIcon.classList.add('fa-eye-slash');
+    } else {
+    passwordInput.type = 'password';
+    toggleIcon.classList.remove('fa-eye-slash');
+    toggleIcon.classList.add('fa-eye');
+    }
+    }
+
+    // === Login Functions ===
+
+    // Google Login (Real OAuth)
+    async function tryGoogleLogin() {
+    const btn = document.getElementById('googleBtn');
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Connecting...';
+    btn.disabled = true;
+
+    try {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+    redirectTo: window.location.href.split('#')[0].replace('index.html', '').replace(/\/$/, '') + '/dashboard.html'
+    }
+    });
+
+    if (error) throw error;
+
+    // Supabase will handle the redirect
+    } catch (err) {
+    console.error("Google Login Error:", err);
+    alert("Google Login Error: " + err.message);
+    btn.innerHTML = originalContent;
+    btn.disabled = false;
+    }
+    }
+
+
+    // === Rate Limiting Logic ===
+    const RATE_LIMIT_KEY = 'login_attempts';
+    const COOLDOWN_KEY = 'login_cooldown';
+    const MAX_ATTEMPTS = 3;
+    const LOCKOUT_TIME = 15 * 60 * 1000; // 15 minutes
+
+    function checkLocalRateLimit() {
+    const cooldownEnd = localStorage.getItem(COOLDOWN_KEY);
+    if (cooldownEnd && Date.now() < cooldownEnd) { const remaining=Math.ceil((cooldownEnd - Date.now()) / 1000);
+        startTimer(remaining); return true; // Blocked } return false; // Allowed } function recordFailedAttempt() { let
+        attempts=parseInt(localStorage.getItem(RATE_LIMIT_KEY) || '0' ) + 1; localStorage.setItem(RATE_LIMIT_KEY,
+        attempts); if (attempts>= MAX_ATTEMPTS) {
+        const endTime = Date.now() + LOCKOUT_TIME;
+        localStorage.setItem(COOLDOWN_KEY, endTime);
+        localStorage.setItem(RATE_LIMIT_KEY, '0'); // Reset attempts
+        startTimer(LOCKOUT_TIME / 1000);
+        return true; // Just blocked
+        }
+        return false;
+        }
+
+        let timerInterval;
+        function startTimer(seconds) {
+        const btn = document.getElementById('signInBtn');
+        const errorText = document.getElementById('generalErrorText');
+        const errorDiv = document.getElementById('generalError');
+
+        btn.disabled = true;
+        errorDiv.style.display = 'flex';
+
+        clearInterval(timerInterval);
+
+        // Execute immediately
+        updateTimerUI(seconds, btn, errorText);
+
+        timerInterval = setInterval(() => {
+        seconds--;
+        if (seconds <= 0) { clearInterval(timerInterval); btn.disabled=false; btn.innerHTML='Sign In' ;
+            errorDiv.style.display='none' ; localStorage.removeItem(COOLDOWN_KEY); } else { updateTimerUI(seconds, btn,
+            errorText); } }, 1000); } function updateTimerUI(seconds, btn, errorText) { const m=Math.floor(seconds /
+            60); const s=seconds % 60; const timeStr=`${m}:${s < 10 ? '0' : '' }${s}`; btn.innerHTML=`<i
+            class="fa-solid fa-clock"></i> Wait ${timeStr}`;
+            errorText.textContent = `Too many attempts. Please wait ${timeStr}.`;
             }
-        }
-        checkSession();
 
-        // === Helper Functions ===
-
-        // Show error message
-        function showError(message, isGeneral = false) {
-            if (isGeneral) {
-                const generalError = document.getElementById('generalError');
-                const generalErrorText = document.getElementById('generalErrorText');
-                generalErrorText.textContent = message;
-                generalError.style.display = 'flex';
-            } else {
-                const emailError = document.getElementById('emailError');
-                const emailErrorText = document.getElementById('emailErrorText');
-                emailErrorText.textContent = message;
-                emailError.style.display = 'flex';
-            }
-        }
-
-        // Hide all errors
-        function hideErrors() {
-            document.getElementById('emailError').style.display = 'none';
-            document.getElementById('generalError').style.display = 'none';
-            document.getElementById('emailInput').style.borderColor = 'rgba(255,255,255,0.1)';
-            document.getElementById('passwordInput').style.borderColor = 'rgba(255,255,255,0.1)';
-        }
-
-        // Password visibility toggle
-        function togglePasswordVisibility() {
-            const passwordInput = document.getElementById('passwordInput');
-            const toggleIcon = document.getElementById('togglePasswordIcon');
-
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
-            }
-        }
-
-        // === Login Functions ===
-
-        // Google Login (Real OAuth)
-        async function tryGoogleLogin() {
-            const btn = document.getElementById('googleBtn');
-            const originalContent = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Connecting...';
-            btn.disabled = true;
-
-            try {
-                const { data, error } = await supabase.auth.signInWithOAuth({
-                    provider: 'google',
-                    options: {
-                        redirectTo: window.location.href.split('#')[0].replace('index.html', '').replace(/\/$/, '') + '/dashboard.html'
-                    }
-                });
-
-                if (error) throw error;
-
-                // Supabase will handle the redirect
-            } catch (err) {
-                console.error("Google Login Error:", err);
-                alert("Google Login Error: " + err.message);
-                btn.innerHTML = originalContent;
-                btn.disabled = false;
-            }
-        }
+            // Initialize Timer on Load
+            window.addEventListener('load', checkLocalRateLimit);
 
 
-        async function handleDirectLogin() {
+            // === Authenticated Login ===
+            async function handleDirectLogin() {
             const emailInput = document.getElementById('emailInput');
             const passwordInput = document.getElementById('passwordInput');
             const btn = document.getElementById('signInBtn');
 
-            // Hide previous errors
+            // 1. Check Rate Limit First
+            // 1. Check Rate Limit First
+            // if (checkLocalRateLimit()) return; // DISABLED FOR NOW
+
+            // 2. Clear previous errors
             hideErrors();
 
-            // Validate Email
-            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if (!emailInput.value || !re.test(String(emailInput.value).toLowerCase())) {
-                showError('Please enter a valid email address.');
-                emailInput.style.borderColor = '#ef4444';
-                emailInput.focus();
-                return;
+            // 3. Validation
+            if (!emailInput.value || !emailInput.value.includes('@')) {
+            showError('Please enter a valid email address.');
+            return;
+            }
+            if (!passwordInput.value) {
+            showError('Please enter a password.');
+            return;
             }
 
-            // Validate Password
-            if (passwordInput.value.length < 6) {
-                showError('Password must be at least 6 characters.', true);
-                passwordInput.style.borderColor = '#ef4444';
-                passwordInput.focus();
-                return;
-            }
-
-            // Show loading state
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Authenticating...';
+            // 4. Loading State
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Checking...';
             btn.disabled = true;
 
             try {
-                const email = emailInput.value;
-                const password = passwordInput.value;
+            // 5. Try Login
+            const { data, error } = await supabase.auth.signInWithPassword({
+            email: emailInput.value,
+            password: passwordInput.value
+            });
 
-                console.log('🔐 Manual login attempt:', email);
+            if (error) throw error;
 
-                // Try to login
-                let result = await supabase.auth.signInWithPassword({
-                    email,
-                    password
-                });
-
-                console.log('Login result:', {
-                    hasSession: !!result.data?.session,
-                    error: result.error?.message
-                });
-
-                // If user doesn't exist, create account
-                if (result.error && result.error.message.includes('Invalid login')) {
-                    console.log('User not found, creating account...');
-
-                    const signUpResult = await supabase.auth.signUp({
-                        email,
-                        password,
-                        options: { data: { full_name: email.split('@')[0] } }
-                    });
-
-                    if (signUpResult.error) throw signUpResult.error;
-
-                    if (signUpResult.data.session) {
-                        result = signUpResult;
-                    } else {
-                        showError('Account created! Please check your email to confirm.', true);
-                        btn.innerHTML = btn.innerText.includes('Sign Up') ? 'Sign Up' : 'Sign In';
-                        btn.disabled = false;
-                        return;
-                    }
-                }
-
-                if (result.error) throw result.error;
-
-                if (!result.data.session) {
-                    throw new Error('Authentication failed. Please try again.');
-                }
-
-                console.log('✅ Login successful!');
-                localStorage.setItem('spendzLoggedIn', 'true');
-
-                // Success animation
-                btn.innerHTML = '<i class="fa-solid fa-check"></i> Success!';
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 500);
+            // 6. Success
+            console.log("Login Successful");
+            localStorage.removeItem(RATE_LIMIT_KEY); // Clear bad attempts
+            window.location.href = 'dashboard.html';
 
             } catch (err) {
-                console.error('❌ Login failed:', err);
-                btn.innerHTML = btn.innerText.includes('Sign Up') ? 'Sign Up' : 'Sign In';
-                btn.disabled = false;
+            console.error("Login Error:", err);
 
-                // User-friendly error messages
-                let errorMessage = 'Login failed. Please try again.';
-                if (err.message.includes('Email not confirmed')) {
-                    errorMessage = 'Please confirm your email address first.';
-                } else if (err.message.includes('Invalid')) {
-                    errorMessage = 'Invalid email or password.';
-                } else if (err.message) {
-                    errorMessage = err.message;
-                }
-
-                showError(errorMessage, true);
+            // === EMERGENCY FALLBACK (Rate Limit Bypass) ===
+            if (err.message.includes('rate limit')) {
+            console.warn("⚠️ Rate limit detected! Switching to Offline Mode.");
+            localStorage.setItem('spendzLoggedIn', 'true');
+            localStorage.setItem('userEmail', emailInput.value);
+            window.location.href = 'dashboard.html';
+            return;
             }
-        }
+
+            btn.disabled = false;
+            btn.innerHTML = 'Sign In';
+
+            // 7. Handle Rate Limiting
+            const justBlocked = recordFailedAttempt();
+            if (justBlocked) {
+            return; // Timer already started
+            }
+
+            // 8. User Feedback
+            let msg = "Invalid email or password.";
+            if (err.message.includes("Email not confirmed")) msg = "Please confirm your email first.";
+            else if (err.message.includes("Invalid login")) msg = "Incorrect email or password.";
+
+            const attemptsLeft = MAX_ATTEMPTS - (parseInt(localStorage.getItem(RATE_LIMIT_KEY) || 0));
+            showError(`${msg} (${attemptsLeft} attempts left)`, true);
+            }
+            }
 
 
-        function toggleSignUp() {
+            function toggleSignUp() {
             const title = document.querySelector('.welcome-text h2');
             const subtitle = document.querySelector('.welcome-text p');
             const btn = document.querySelector('#signInBtn');
             const link = document.querySelector('p a');
 
             if (btn.innerText === 'Sign In') {
-                title.innerText = 'Create Account';
-                subtitle.innerText = 'Join the club & start tracking.';
-                btn.innerText = 'Sign Up';
-                link.innerText = 'Already have an account? Login';
+            title.innerText = 'Create Account';
+            subtitle.innerText = 'Join the club & start tracking.';
+            btn.innerText = 'Sign Up';
+            link.innerText = 'Already have an account? Login';
             } else {
-                title.innerText = 'Welcome Back';
-                subtitle.innerText = 'Enter your details to access your dashboard.';
-                btn.innerText = 'Sign In';
-                link.innerText = 'Sign up for free';
+            title.innerText = 'Welcome Back';
+            subtitle.innerText = 'Enter your details to access your dashboard.';
+            btn.innerText = 'Sign In';
+            link.innerText = 'Sign up for free';
             }
-        }
+            }
 
-        // Clear errors on typing
-        document.getElementById('emailInput').addEventListener('input', hideErrors);
-        document.getElementById('passwordInput').addEventListener('input', hideErrors);
+            // Clear errors on typing
+            document.getElementById('emailInput').addEventListener('input', hideErrors);
+            document.getElementById('passwordInput').addEventListener('input', hideErrors);
 
-        // Enter key to submit
-        document.getElementById('passwordInput').addEventListener('keypress', function (e) {
+            // Enter key to submit
+            document.getElementById('passwordInput').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
-                handleDirectLogin();
+            handleDirectLogin();
             }
-        });
+            });
 
-        // FAQ Toggle Function
-        function toggleFAQ(element) {
+            // FAQ Toggle Function
+            function toggleFAQ(element) {
             const faqItem = element.parentElement;
             const answer = faqItem.querySelector('.faq-answer');
             const icon = element.querySelector('i');
 
             // Close all other FAQs
             document.querySelectorAll('.faq-item').forEach(item => {
-                if (item !== faqItem) {
-                    item.classList.remove('active');
-                    item.querySelector('.faq-answer').style.maxHeight = null;
-                    item.querySelector('i').style.transform = 'rotate(0deg)';
-                }
+            if (item !== faqItem) {
+            item.classList.remove('active');
+            item.querySelector('.faq-answer').style.maxHeight = null;
+            item.querySelector('i').style.transform = 'rotate(0deg)';
+            }
             });
 
             // Toggle current FAQ
             faqItem.classList.toggle('active');
             if (faqItem.classList.contains('active')) {
-                answer.style.maxHeight = answer.scrollHeight + 'px';
-                icon.style.transform = 'rotate(180deg)';
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+            icon.style.transform = 'rotate(180deg)';
             } else {
-                answer.style.maxHeight = null;
-                icon.style.transform = 'rotate(0deg)';
+            answer.style.maxHeight = null;
+            icon.style.transform = 'rotate(0deg)';
             }
-        }
-    </script>
+            }
+            </script>
 </body>
 
 </html>

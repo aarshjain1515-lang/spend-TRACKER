@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SpendZ - Gen Z Expense Tracker</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -188,45 +191,47 @@
         </div>
 
         <!-- === HISTORY VIEW === -->
-        <h2 class="section-title" style="margin-top: 0;">Transaction History 📜</h2>
-        <div class="transactions-list">
-            <div id="history-list">
-                <!-- Populated by JS -->
+        <div id="view-history" class="dashboard-view" style="display: none;">
+            <h2 class="section-title" style="margin-top: 0;">Your Transaction History 📜</h2>
+            <div class="transactions-list">
+                <div id="history-list">
+                    <!-- Populated by JS -->
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- === GOALS VIEW === -->
-    <div id="view-goals" class="dashboard-view" style="display: none;">
-        <h2 class="section-title" style="margin-top: 0;">Savings Goals 🎯</h2>
+        <!-- === GOALS VIEW === -->
+        <div id="view-goals" class="dashboard-view" style="display: none;">
+            <h2 class="section-title" style="margin-top: 0;">Savings Goals 🎯</h2>
 
-        <div class="goals-grid"
-            style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-top: 20px;">
-            <div class="glass-card" style="text-align: center;">
-                <div style="font-size: 4rem; margin-bottom: 10px;">🏝️</div>
-                <h3 style="margin-bottom: 5px;">Bali Trip</h3>
-                <p style="color: var(--text-gray); margin-bottom: 15px;">Target: ₹50,000</p>
+            <div class="goals-grid"
+                style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-top: 20px;">
+                <div class="glass-card" style="text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 10px;">🏝️</div>
+                    <h3 style="margin-bottom: 5px;">Bali Trip</h3>
+                    <p style="color: var(--text-gray); margin-bottom: 15px;">Target: ₹50,000</p>
 
-                <div
-                    style="background: rgba(255,255,255,0.1); height: 12px; border-radius: 10px; overflow: hidden; margin-bottom: 10px;">
                     <div
-                        style="width: 40%; background: linear-gradient(90deg, var(--primary), var(--accent)); height: 100%;">
+                        style="background: rgba(255,255,255,0.1); height: 12px; border-radius: 10px; overflow: hidden; margin-bottom: 10px;">
+                        <div
+                            style="width: 40%; background: linear-gradient(90deg, var(--primary), var(--accent)); height: 100%;">
+                        </div>
+                    </div>
+                    <div
+                        style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-gray);">
+                        <span>₹20,000 saved</span>
+                        <span>40%</span>
                     </div>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-gray);">
-                    <span>₹20,000 saved</span>
-                    <span>40%</span>
+
+                <div class="glass-card"
+                    style="text-align: center; border: 2px dashed rgba(255,255,255,0.1); display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; height: 100%; min-height: 250px;">
+                    <div style="font-size: 3rem; margin-bottom: 15px; color: var(--primary);"><i
+                            class="fa-solid fa-plus"></i></div>
+                    <h3 style="color: var(--text-gray);">Add Goal</h3>
                 </div>
             </div>
-
-            <div class="glass-card"
-                style="text-align: center; border: 2px dashed rgba(255,255,255,0.1); display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; height: 100%; min-height: 250px;">
-                <div style="font-size: 3rem; margin-bottom: 15px; color: var(--primary);"><i
-                        class="fa-solid fa-plus"></i></div>
-                <h3 style="color: var(--text-gray);">Add Goal</h3>
-            </div>
         </div>
-    </div>
 
     </div>
 

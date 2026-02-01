@@ -73,6 +73,18 @@ async function ensureUser() {
 
 async function loadExpenses() {
     if (!state.user) return; // Guard
+
+    // === GUEST MODE ===
+    if (state.user.id.startsWith('guest_')) {
+        const localData = localStorage.getItem('guest_expenses');
+        state.expenses = localData ? JSON.parse(localData) : [];
+        renderExpenses();
+        renderHistory();
+        updateBalance();
+        if (typeof updateCharts === 'function') updateCharts();
+        return;
+    }
+
     try {
         const { data, error } = await supabase
             .from('expenses')
@@ -94,14 +106,7 @@ async function loadExpenses() {
 async function handleAddExpense(e) {
     e.preventDefault();
 
-    // CRITICAL FIX: Ensure user exists before insert
-    if (!state.user) {
-        const success = await ensureUser();
-        if (!success) {
-            alert("Connection lost. Please refresh the page to log in again.");
-            return;
-        }
-    }
+    if (!state.user) await ensureUser();
 
     const submitBtn = elements.addForm.querySelector('button[type="submit"]');
     submitBtn.textContent = 'Adding...';
@@ -111,16 +116,35 @@ async function handleAddExpense(e) {
     const date = document.getElementById('expense-date').value || new Date().toISOString();
     const title = document.getElementById('expense-title').value || category;
 
+    const newExpense = {
+        user_id: state.user.id,
+        amount,
+        category,
+        date,
+        title
+    };
+
+    // === GUEST MODE ===
+    if (state.user.id.startsWith('guest_')) {
+        newExpense.id = 'guest_' + Date.now(); // Generate fake ID
+        state.expenses.unshift(newExpense);
+        localStorage.setItem('guest_expenses', JSON.stringify(state.expenses));
+
+        // Update UI
+        renderExpenses();
+        renderHistory();
+        updateBalance();
+        if (typeof updateCharts === 'function') updateCharts();
+        closeModal('expense-modal');
+        elements.addForm.reset();
+        submitBtn.textContent = 'Add Expense';
+        return;
+    }
+
     try {
         const { data, error } = await supabase
             .from('expenses')
-            .insert([{
-                user_id: state.user.id,
-                amount,
-                category,
-                date,
-                title
-            }])
+            .insert([newExpense])
             .select();
 
         if (error) throw error;
@@ -143,6 +167,17 @@ async function handleAddExpense(e) {
 
 async function deleteExpense(id) {
     if (!confirm('Delete this expense?')) return;
+
+    // === GUEST MODE ===
+    if (state.user.id.startsWith('guest_')) {
+        state.expenses = state.expenses.filter(e => e.id !== id);
+        localStorage.setItem('guest_expenses', JSON.stringify(state.expenses));
+        renderExpenses();
+        renderHistory();
+        updateBalance();
+        if (typeof updateCharts === 'function') updateCharts();
+        return;
+    }
 
     try {
         const { error } = await supabase
@@ -167,6 +202,17 @@ async function deleteExpense(id) {
 // === Profile Operations ===
 
 async function loadProfile() {
+    // === GUEST MODE ===
+    if (state.user.id.startsWith('guest_')) {
+        const localBudget = localStorage.getItem('guest_budget');
+        state.monthlyBudget = localBudget ? parseFloat(localBudget) : 0;
+
+        if (state.monthlyBudget) {
+            updateBudgetUI(state.monthlyBudget);
+        }
+        return;
+    }
+
     try {
         const { data, error } = await supabase
             .from('profiles')
@@ -189,9 +235,7 @@ async function loadProfile() {
 
             // Update budget display
             if (data.monthly_budget) {
-                document.getElementById('monthly-limit').textContent = `₹${data.monthly_budget}`;
-                document.getElementById('weekly-limit').textContent = `₹${Math.round(data.monthly_budget / 4)}`;
-                document.getElementById('daily-limit').textContent = `₹${Math.round(data.monthly_budget / 30)}`;
+                updateBudgetUI(data.monthly_budget);
             }
 
             // Update Avatar
@@ -423,6 +467,20 @@ function setupEventListeners() {
 
             if (!state.user) return;
 
+            // === GUEST MODE: Local Storage Only ===
+            if (state.user.id.startsWith('guest_')) {
+                state.monthlyBudget = monthlyBudget;
+                localStorage.setItem('guest_budget', monthlyBudget);
+
+                // Update UI
+                updateBudgetUI(monthlyBudget);
+                closeModal('budget-modal');
+                updateBalance();
+                if (typeof updateCharts === 'function') updateCharts();
+                alert('✅ Budget (Guest) updated!');
+                return;
+            }
+
             try {
                 const { error } = await supabase
                     .from('profiles')
@@ -433,11 +491,7 @@ function setupEventListeners() {
 
                 // Update state
                 state.monthlyBudget = monthlyBudget;
-
-                // Update UI
-                document.getElementById('monthly-limit').textContent = `₹${monthlyBudget}`;
-                document.getElementById('weekly-limit').textContent = `₹${Math.round(monthlyBudget / 4)}`;
-                document.getElementById('daily-limit').textContent = `₹${Math.round(monthlyBudget / 30)}`;
+                updateBudgetUI(monthlyBudget);
 
                 closeModal('budget-modal');
                 updateBalance();
@@ -448,6 +502,16 @@ function setupEventListeners() {
                 alert('Failed to update budget: ' + err.message);
             }
         });
+    }
+}
+
+// Helper for UI updates (Moved to global scope)
+function updateBudgetUI(amount) {
+    const daily = document.getElementById('daily-limit');
+    if (daily) {
+        document.getElementById('monthly-limit').textContent = `₹${amount}`;
+        document.getElementById('weekly-limit').textContent = `₹${Math.round(amount / 4)}`;
+        document.getElementById('daily-limit').textContent = `₹${Math.round(amount / 30)}`;
     }
 }
 

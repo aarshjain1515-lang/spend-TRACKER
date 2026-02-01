@@ -33,13 +33,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     await ensureUser();
 
     if (!state.user) {
-        // === OFFLINE / GUEST MODE (Fix for Loop) ===
-        console.log("⚠️ No active session. Enabling Guest Mode.");
-        state.user = {
-            id: 'guest_user_id',
-            email: 'guest@spendz.app',
-            user_metadata: { full_name: 'Guest User' }
-        };
+        // Check if we specifically allowed Guest Mode
+        const isGuest = localStorage.getItem('guest_mode') === 'true';
+
+        if (isGuest) {
+            console.log("⚠️ No active session. Guest Mode Enabled.");
+            state.user = {
+                id: 'guest_user_id',
+                email: 'guest@spendz.app',
+                user_metadata: { full_name: 'Guest User' }
+            };
+        } else {
+            // NO Session and NO Guest Flag -> Redirect to Login
+            console.warn("No session found. Redirecting to Login.");
+            window.location.replace('index.html');
+            return;
+        }
     }
 
     console.log("✅ Logged in as:", state.user.id);

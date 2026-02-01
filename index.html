@@ -17,11 +17,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Link to the fresh CSS -->
-    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="stylesheet" href="style.css?v=10">
 
     <!-- Supabase SDK (Crucial for Database) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-client.js"></script>
+    <script src="supabase-client.js?v=10"></script>
 </head>
 
 <body>
@@ -372,7 +372,7 @@
                 const emailError = document.getElementById('emailError');
                 const emailErrorText = document.getElementById('emailErrorText');
                 emailErrorText.textContent = message;
-                emle.display = 'flex';
+                emailError.style.display = 'flex';
             }
         }
 
@@ -395,7 +395,7 @@
                 toggleIcon.classList.add('fa-eye-slash');
             } else {
                 passwordInput.type = 'password';
-            toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.remove('fa-eye-slash');
                 toggleIcon.classList.add('fa-eye');
             }
         }
@@ -404,7 +404,7 @@
 
         // Google Login (Real OAuth)
         async function tryGoogleLogin() {
-    const btn = document.getElementById('googleBtn');
+            const btn = document.getElementById('googleBtn');
             const originalContent = btn.innerHTML;
             btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Connecting...';
             btn.disabled = true;
@@ -416,9 +416,9 @@
                         redirectTo: window.location.href.split('#')[0].replace('index.html', '').replace(/\/$/, '') + '/dashboard.html'
                     }
                 });
-                
+
                 if (error) throw error;
-                
+
                 // Supabase will handle the redirect
             } catch (err) {
                 console.error("Google Login Error:", err);

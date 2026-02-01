@@ -19,6 +19,7 @@ const categories = {
 const elements = {
     budgetDisplay: document.getElementById('total-balance'),
     expenseList: document.querySelector('#expense-list'),
+    historyList: document.getElementById('history-list'),
 
     // Modals
     addModal: document.getElementById('expense-modal'),
@@ -78,6 +79,7 @@ async function loadExpenses() {
 
         state.expenses = data || [];
         renderExpenses();
+        renderHistory();
         updateBalance();
         if (typeof updateCharts === 'function') updateCharts();
     } catch (err) {
@@ -122,6 +124,7 @@ async function handleAddExpense(e) {
         // Update UI locally immediately
         state.expenses.unshift(data[0]);
         renderExpenses();
+        renderHistory();
         updateBalance();
         if (typeof updateCharts === 'function') updateCharts();
         closeModal('expense-modal');
@@ -148,6 +151,7 @@ async function deleteExpense(id) {
         // Update state
         state.expenses = state.expenses.filter(e => e.id !== id);
         renderExpenses();
+        renderHistory();
         updateBalance();
         if (typeof updateCharts === 'function') updateCharts();
 
@@ -298,6 +302,27 @@ function updateAvatarUI(src) {
     if (headerIcon) headerIcon.innerHTML = `<img src="${src}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
 }
 
+function generateExpenseHTML(exp) {
+    const cat = categories[exp.category] || categories['Other'];
+    const dateStr = new Date(exp.date).toLocaleDateString();
+
+    return `
+    <div class="expense-item">
+        <div class="expense-icon" style="background:${cat.color}20; color:${cat.color}">
+            ${cat.icon}
+        </div>
+        <div class="expense-info">
+            <span class="expense-title">${exp.title}</span>
+            <span class="expense-date">${dateStr} • ${exp.category}</span>
+        </div>
+        <div class="expense-amount">-₹${exp.amount}</div>
+        <button onclick="deleteExpense('${exp.id}')" style="margin-left:10px; border:none; background:none; color:#666; cursor:pointer;">
+            <i class="fa-solid fa-trash"></i>
+        </button>
+    </div>
+    `;
+}
+
 function renderExpenses() {
     elements.expenseList.innerHTML = '';
 
@@ -324,29 +349,24 @@ function renderExpenses() {
     if (displayData.length === 0) {
         const viewText = state.view.charAt(0).toUpperCase() + state.view.slice(1);
         elements.expenseList.innerHTML = `<div style="text-align:center; padding:20px; color:#666;">No ${viewText} expenses found</div>`;
+    } else {
+        displayData.forEach(exp => {
+            elements.expenseList.insertAdjacentHTML('beforeend', generateExpenseHTML(exp));
+        });
+    }
+}
+
+function renderHistory() {
+    if (!elements.historyList) return;
+    elements.historyList.innerHTML = '';
+
+    if (state.expenses.length === 0) {
+        elements.historyList.innerHTML = `<div style="text-align:center; padding:20px; color:#666;">No history found</div>`;
         return;
     }
 
-    displayData.forEach(exp => {
-        const cat = categories[exp.category] || categories['Other'];
-        const dateStr = new Date(exp.date).toLocaleDateString();
-
-        const html = `
-        <div class="expense-item">
-            <div class="expense-icon" style="background:${cat.color}20; color:${cat.color}">
-                ${cat.icon}
-            </div>
-            <div class="expense-info">
-                <span class="expense-title">${exp.title}</span>
-                <span class="expense-date">${dateStr} • ${exp.category}</span>
-            </div>
-            <div class="expense-amount">-₹${exp.amount}</div>
-            <button onclick="deleteExpense('${exp.id}')" style="margin-left:10px; border:none; background:none; color:#666; cursor:pointer;">
-                <i class="fa-solid fa-trash"></i>
-            </button>
-        </div>
-        `;
-        elements.expenseList.insertAdjacentHTML('beforeend', html);
+    state.expenses.forEach(exp => {
+        elements.historyList.insertAdjacentHTML('beforeend', generateExpenseHTML(exp));
     });
 }
 

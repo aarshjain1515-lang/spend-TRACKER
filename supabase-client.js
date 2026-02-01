@@ -1,8 +1,8 @@
 // Initialize Supabase Client
 // Using NEW Vercel Supabase Database
 
-const supabaseUrl = 'https://yxuqkdrugtjktrhecdyv.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4dXFrZHJ1Z3Rqa3RyaGVjZHl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4ODUyOTcsImV4cCI6MjA4NTQ2MTI5N30.P-gNYwBRlgr679TAdi7oNLgBPQMDEZqbGUJnWtGttFE';
+const supabaseUrl = 'https://dgpobgmnjtxnteiegutq.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRncG9iZ21uanR4bnRlaWVndXRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4Nzk1MjMsImV4cCI6MjA4NTQ1NTUyM30.6pj64r3xrFA8njYz4MyW8NFWQb2bFFTXoFDosq0HsCQ';
 
 // Safe Initialization
 try {
@@ -18,6 +18,7 @@ try {
 
         console.log("✅ Supabase Client Initialized (NEW Vercel Database)");
         console.log("URL:", supabaseUrl);
+        console.log("Google Client ID Linked: 4377...uqa5");
     }
 } catch (err) {
     console.error("❌ Supabase Init Failed:", err);

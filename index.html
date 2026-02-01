@@ -272,9 +272,33 @@
                 // 1. Try Real Login
                 const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-                if (error) throw error;
+                if (error) {
+                    // 2. If User Not Found (Invalid credentials), Try Sign Up automatically
+                    if (error.message.includes('Invalid login credentials')) {
+                        console.log("User not found, trying auto-signup...");
+                        const { data: upData, error: upError } = await supabase.auth.signUp({
+                            email,
+                            password,
+                            options: { data: { full_name: email.split('@')[0] } }
+                        });
 
-                // Success
+                        if (upError) throw upError;
+
+                        // Signup Success
+                        if (upData.session) {
+                            window.location.href = 'dashboard.html';
+                            return;
+                        } else if (upData.user) {
+                            // Email confirmation required?
+                            showError("Account created! Please check your email to confirm.");
+                            resetBtn();
+                            return;
+                        }
+                    }
+                    throw error; // Throw other errors (or original if not handled)
+                }
+
+                // Login Success
                 window.location.href = 'dashboard.html';
 
             } catch (err) {

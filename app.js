@@ -324,12 +324,42 @@ async function handleSaveProfile(e) {
         updated_at: new Date()
     };
 
+    // === GUEST MODE: Local Save ===
+    if (state.user.id.startsWith('guest_')) {
+        localStorage.setItem('guest_profile', JSON.stringify(updates));
+
+        // Update header immediately if name changed
+        if (updates.full_name) {
+            document.getElementById('headerUserName').textContent = updates.full_name.split(' ')[0];
+            const firstLetter = updates.full_name.charAt(0).toUpperCase();
+            const avatarEl = document.getElementById('headerAvatar');
+            if (avatarEl) avatarEl.innerHTML = `<span style="font-size: 1.3rem; font-weight: 700;">${firstLetter}</span>`;
+        }
+
+        btn.textContent = 'Saved (Offline)';
+        btn.style.background = '#10b981';
+        setTimeout(() => {
+            btn.textContent = 'Save Profile';
+            btn.style.background = '';
+            closeModal('profile-modal');
+        }, 1000);
+        return;
+    }
+
     try {
         const { error } = await supabase
             .from('profiles')
             .upsert(updates);
 
         if (error) throw error;
+
+        // Update header immediately
+        if (updates.full_name) {
+            document.getElementById('headerUserName').textContent = updates.full_name.split(' ')[0];
+            const firstLetter = updates.full_name.charAt(0).toUpperCase();
+            const avatarEl = document.getElementById('headerAvatar');
+            if (avatarEl) avatarEl.innerHTML = `<span style="font-size: 1.3rem; font-weight: 700;">${firstLetter}</span>`;
+        }
 
         btn.textContent = 'Saved Successfully';
         btn.style.background = '#10b981';

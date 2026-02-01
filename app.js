@@ -442,13 +442,13 @@ window.switchView = (view) => {
 };
 
 window.logout = async () => {
-    // 1. Clear Local Flags
-    localStorage.removeItem('spendzLoggedIn');
-    localStorage.removeItem('spendzUserEmail');
-    localStorage.removeItem('spendzUserName');
+    // 1. Nuclear Option: Wipe ALL Local Data (Guest Data, Flags, Everything)
+    localStorage.clear();
 
     // 2. Clear Supabase Session
-    await supabase.auth.signOut();
+    try {
+        await supabase.auth.signOut();
+    } catch (e) { console.log("Signout error ignored"); }
 
     // 3. Force Redirect to Index
     window.location.replace('index.html');

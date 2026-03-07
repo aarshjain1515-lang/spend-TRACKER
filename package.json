@@ -14,5 +14,9 @@
     "budget"
   ],
   "author": "Aarsh Jain",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.2.1",
+    "google-auth-library": "^10.6.1"
+  }
 }

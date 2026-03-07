@@ -7,7 +7,7 @@ const PORT = 3000;
 
 // 🔴 TODO: Replace this with your ACTUAL Client ID from Google Cloud Console
 // It usually looks like: "123456789-abcdefg.apps.googleusercontent.com"
-const CLIENT_ID = '437755441794-3u031b0eb8jge4761f6nt8aqnn54uqa5.apps.googleusercontent.com';
+const CLIENT_ID = '1056280275206-98jvdc39pgei3qjens63ej90ql8nbug0.apps.googleusercontent.com';
 
 const client = new OAuth2Client(CLIENT_ID);
 

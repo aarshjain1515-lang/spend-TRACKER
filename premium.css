@@ -11,9 +11,10 @@
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(13, 2, 33, 0.7);
+    background: rgba(241, 245, 249, 0.85); /* var(--bg-card) with opacity */
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 20px rgba(163, 177, 198, 0.2);
 }
 
 .nav-brand {
@@ -23,33 +24,36 @@
     font-family: var(--font-heading);
     font-size: 1.5rem;
     font-weight: 700;
-    color: white;
+    color: var(--text-white);
 }
 
 .brand-icon {
     width: 32px;
     height: 32px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
+    background: var(--bg-card);
+    box-shadow: var(--shadow-clay-sm);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
+    color: var(--primary);
 }
 
 .nav-links {
     display: flex;
     gap: 2rem;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--bg-input);
     padding: 8px 24px;
     border-radius: 100px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: var(--shadow-clay-pressed);
+    border: none;
 }
 
 .nav-item {
     text-decoration: none;
     color: var(--text-gray);
-    font-weight: 500;
+    font-weight: 600;
     font-size: 0.95rem;
     display: flex;
     align-items: center;
@@ -59,12 +63,12 @@
 
 .nav-item:hover,
 .nav-item.active {
-    color: white;
+    color: var(--primary);
 }
 
 .nav-item i {
-    font-size: 0.9rem;
-    opacity: 0.7;
+    font-size: 1rem;
+    opacity: 0.8;
 }
 
 .nav-profile {
@@ -78,42 +82,54 @@
     align-items: center;
     gap: 10px;
     padding: 6px 16px 6px 6px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
     border-radius: 100px;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: var(--shadow-clay-sm);
+    color: var(--text-white);
+    font-weight: 600;
 }
 
 .profile-pill:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-clay);
+    transform: translateY(-2px);
 }
 
 .avatar-small {
     width: 32px;
     height: 32px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    background: var(--bg-input);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.9rem;
     font-weight: 700;
+    box-shadow: var(--shadow-clay-pressed);
+    color: var(--primary);
 }
 
 .logout-icon-btn {
-    background: transparent;
+    background: var(--bg-card);
     border: none;
     color: var(--text-gray);
     font-size: 1.1rem;
     cursor: pointer;
-    padding: 8px;
-    transition: color 0.3s ease;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-clay-sm);
+    transition: all 0.3s ease;
 }
 
 .logout-icon-btn:hover {
     color: #ef4444;
+    box-shadow: var(--shadow-clay);
+    transform: translateY(-2px);
 }
 
 /* Premium Layout Container */
@@ -152,25 +168,19 @@
 
 /* Hero Balance Card */
 .hero-balance-card {
-    background: linear-gradient(180deg, rgba(26, 11, 46, 0.8) 0%, rgba(13, 2, 33, 0.9) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
+    background: var(--bg-card);
+    border: none;
+    border-radius: var(--radius-lg);
     padding: 3rem;
     max-width: 800px;
     margin: 0 auto 3rem;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-clay);
     position: relative;
     overflow: hidden;
 }
 
 .hero-balance-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.5), transparent);
+    content: none;
 }
 
 .balance-content {
@@ -181,17 +191,18 @@
     text-transform: uppercase;
     font-size: 0.9rem;
     letter-spacing: 2px;
-    color: var(--text-secondary);
+    color: var(--text-muted);
     display: block;
     margin-bottom: 10px;
+    font-weight: 600;
 }
 
 .balance-content .amount {
     font-size: 4.5rem;
     font-weight: 800;
     font-family: var(--font-heading);
-    color: white;
-    text-shadow: 0 0 30px rgba(0, 245, 255, 0.2);
+    color: var(--text-white);
+    text-shadow: none;
 }
 
 .hero-actions {
@@ -214,26 +225,27 @@
 }
 
 .action-btn.primary {
-    background: var(--primary);
+    background: var(--bg-card);
     border: none;
-    color: black;
-    box-shadow: 0 0 20px rgba(0, 245, 255, 0.4);
+    color: var(--primary);
+    box-shadow: var(--shadow-clay-sm);
 }
 
 .action-btn.primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0 30px rgba(0, 245, 255, 0.6);
+    box-shadow: var(--shadow-clay);
+    color: var(--primary-hover);
 }
 
 .action-btn.secondary {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
+    background: var(--bg-input);
+    border: none;
+    color: var(--text-gray);
+    box-shadow: var(--shadow-clay-pressed);
 }
 
 .action-btn.secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: white;
+    color: var(--text-white);
 }
 
 /* Hero Stats Pills */
@@ -245,33 +257,35 @@
 }
 
 .stat-pill {
-    padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 10px 20px;
+    background: var(--bg-card);
+    border: none;
     border-radius: 100px;
     color: var(--text-gray);
     font-size: 0.9rem;
+    font-weight: 600;
     display: flex;
     align-items: center;
     gap: 8px;
+    box-shadow: var(--shadow-clay-sm);
 }
 
 .stat-pill .dot {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
 }
 
 .stat-pill .dot.daily {
-    background: var(--primary);
+    background: var(--success);
 }
 
 .stat-pill .dot.weekly {
-    background: var(--accent);
+    background: var(--primary);
 }
 
 .stat-pill .dot.monthly {
-    background: var(--accent-3);
+    background: var(--accent);
 }
 
 /* Mobile Adjustments */

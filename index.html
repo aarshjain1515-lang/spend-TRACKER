@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="style.css?v=20">
+    <link rel="stylesheet" href="style.css?v=21">
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -23,213 +23,72 @@
 
 <body>
 
-    <div class="split-screen">
-
-        <!-- LEFT PANEL: Vertical Animation -->
-        <div class="left-panel">
-
-            <div class="brand-overlay">
-                <h1>SpendZ</h1>
-                <p>Track. Save. Vibe. ✨</p>
-            </div>
-
-            <div class="scroll-container">
-                <!-- Column 1 (Up) -->
-                <div class="scroll-column">
-                    <!-- Cards doubled for seamless scroll -->
-                    <div class="scroll-card">
-                        <div class="card-icon">🍕</div>
-                        <div class="card-text">
-                            <h4>Food</h4>
-                            <p>₹450 • Yesterday</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">🎬</div>
-                        <div class="card-text">
-                            <h4>Movies</h4>
-                            <p>₹300 • Friday</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">⛽</div>
-                        <div class="card-text">
-                            <h4>Petrol</h4>
-                            <p>₹1000 • Mon</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">🎧</div>
-                        <div class="card-text">
-                            <h4>Spotify</h4>
-                            <p>₹119 • Sub</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">👟</div>
-                        <div class="card-text">
-                            <h4>Sneakers</h4>
-                            <p>₹2500 • Goal</p>
-                        </div>
-                    </div>
-                    <!-- Duplicate -->
-                    <div class="scroll-card">
-                        <div class="card-icon">🍕</div>
-                        <div class="card-text">
-                            <h4>Food</h4>
-                            <p>₹450 • Yesterday</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">🎬</div>
-                        <div class="card-text">
-                            <h4>Movies</h4>
-                            <p>₹300 • Friday</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">⛽</div>
-                        <div class="card-text">
-                            <h4>Petrol</h4>
-                            <p>₹1000 • Mon</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">🎧</div>
-                        <div class="card-text">
-                            <h4>Spotify</h4>
-                            <p>₹119 • Sub</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">👟</div>
-                        <div class="card-text">
-                            <h4>Sneakers</h4>
-                            <p>₹2500 • Goal</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Column 2 (Down/Reverse) -->
-                <div class="scroll-column reverse">
-                    <div class="scroll-card">
-                        <div class="card-icon">🎮</div>
-                        <div class="card-text">
-                            <h4>Gaming</h4>
-                            <p>₹3000 • Steam</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">🍔</div>
-                        <div class="card-text">
-                            <h4>Burger</h4>
-                            <p>₹150 • Lunch</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">🚌</div>
-                        <div class="card-text">
-                            <h4>Bus Fare</h4>
-                            <p>₹20 • Daily</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">📱</div>
-                        <div class="card-text">
-                            <h4>Recharge</h4>
-                            <p>₹299 • Jio</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">💊</div>
-                        <div class="card-text">
-                            <h4>Meds</h4>
-                            <p>₹500 • Pharm</p>
-                        </div>
-                    </div>
-                    <!-- Duplicate -->
-                    <div class="scroll-card">
-                        <div class="card-icon">🎮</div>
-                        <div class="card-text">
-                            <h4>Gaming</h4>
-                            <p>₹3000 • Steam</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">🍔</div>
-                        <div class="card-text">
-                            <h4>Burger</h4>
-                            <p>₹150 • Lunch</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">🚌</div>
-                        <div class="card-text">
-                            <h4>Bus Fare</h4>
-                            <p>₹20 • Daily</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">📱</div>
-                        <div class="card-text">
-                            <h4>Recharge</h4>
-                            <p>₹299 • Jio</p>
-                        </div>
-                    </div>
-                    <div class="scroll-card">
-                        <div class="card-icon">💊</div>
-                        <div class="card-text">
-                            <h4>Meds</h4>
-                            <p>₹500 • Pharm</p>
-                        </div>
-                    </div>
+    <div class="login-wrapper">
+        <div class="login-card">
+            
+            <!-- Left Side: Illustration & Text -->
+            <div class="login-left">
+                <!-- Fun Gen Z Graphic -->
+                <div class="decor decor-1"></div>
+                <div class="decor decor-2"></div>
+                <div class="decor decor-3"></div>
+                <div class="decor decor-circle-bg"></div>
+                
+                <img src="genz_illustration.png" alt="Holographic Vibe Illustration" class="illustration-img">
+                
+                <div class="left-text">
+                    <h2>Vibe Check Your Money.</h2>
+                    <p>No cap, tracking your expenses just got actually aesthetic. ✨</p>
                 </div>
             </div>
-        </div>
 
-        <!-- RIGHT PANEL: Login Form -->
-        <div class="right-panel">
-            <div class="login-box">
-                <div class="login-header">
-                    <h2>Welcome Back 👋</h2>
-                    <p>Enter your details to vibe with your finance.</p>
+            <!-- Right Side: Login Form -->
+            <div class="login-right">
+                <div class="login-logo">
+                    <span class="logo-text-gradient">SpendZ ✨</span>
                 </div>
+                
+                <h3>Drop In</h3>
+                <p class="login-subtitle">Sign in to keep your streaks alive and track your bags 💰</p>
 
-                <div class="alert-box" id="generalError"
-                    style="display: none; background: rgba(255,0,0,0.1); border: 1px solid #FF006E; color: #FF006E; padding: 10px; border-radius: 8px; margin-bottom: 20px; align-items: center; gap: 10px;">
+                <div class="alert-box" id="generalError" style="display: none;">
                     <i class="fa-solid fa-circle-exclamation"></i>
                     <span id="generalErrorText">Error message here</span>
                 </div>
 
-                <button class="btn-google-login" id="googleBtn" onclick="tryGoogleLogin()">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="G">
+                <button class="btn-google-new" id="googleBtn" onclick="tryGoogleLogin()">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16" alt="G">
                     Continue with Google
                 </button>
 
-                <div class="divider">
-                    <span>OR EMAIL</span>
+                <div class="divider-new">
+                    <span>or drop an email</span>
                 </div>
 
-                <div class="input-group">
-                    <i class="fa-solid fa-envelope"></i>
-                    <input type="email" id="emailInput" class="input-field" placeholder="Email Address" name="email"
-                        autocomplete="username">
+                <div class="input-wrapper">
+                    <label>Email</label>
+                    <input type="email" id="emailInput" class="input-new" placeholder="mail@abc.com" autocomplete="username">
                 </div>
 
-                <div class="input-group">
-                    <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="passwordInput" class="input-field" placeholder="Password" name="password"
-                        autocomplete="current-password">
+                <div class="input-wrapper">
+                    <label>Password</label>
+                    <input type="password" id="passwordInput" class="input-new" placeholder="*********" autocomplete="current-password">
                 </div>
 
-                <button class="btn-login" id="signInBtn" onclick="handleDirectLogin()">Sign In</button>
+                <div class="login-options">
+                    <label class="remember-cb">
+                        <input type="checkbox"> <span class="checkmark"></span> Remember Me
+                    </label>
+                    <a href="#" class="forgot-link">Forgot Password?</a>
+                </div>
 
-                <p style="text-align: center; margin-top: 20px; font-size: 0.9rem;">
-                    Don't have an account? <a href="#" style="color: var(--primary); text-decoration: none;"
-                        onclick="showError('Just enter any email/pass to automatically sign up/in!', true)">Sign up for
-                        free</a>
+                <button class="btn-primary-new" id="signInBtn" onclick="handleDirectLogin()">Login</button>
+
+                <p class="register-text">
+                    Not Registered Yet? <a href="#" onclick="showError('Just enter any email/pass to automatically sign up/in!', true)">Create an account</a>
                 </p>
             </div>
+            
         </div>
     </div>
 
@@ -342,8 +201,9 @@
                 if (error) throw error;
             } catch (err) {
                 console.error("Google Auth Error:", err);
-                showError("Google Login Failed: " + err.message);
-                gBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> Continue with Google';
+                // Fallback to Guest Mode if not configured yet
+                console.warn("Google Auth not fully configured. Falling back to Guest Mode.");
+                enableGuestMode('google-guest@vibe.com');
             }
         }
 
@@ -358,7 +218,53 @@
             btn.disabled = false;
             btn.innerText = 'Sign In';
         }
+        
+        // Theme Toggle Logic
+        function initTheme() {
+            const savedTheme = localStorage.getItem('spendz_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('spendz_theme', newTheme);
+            updateThemeIcon(newTheme);
+        }
+
+        function updateThemeIcon(theme) {
+            const icon = document.querySelector('#themeToggleBtn i');
+            if (icon) {
+                if (theme === 'dark') {
+                    icon.className = 'fa-solid fa-sun';
+                } else {
+                    icon.className = 'fa-solid fa-moon';
+                }
+            }
+        }
+        
+        // Initialize theme before rendering content
+        initTheme();
+        
+        // Duplicate columns to fill the full screen background properly
+        document.addEventListener("DOMContentLoaded", () => {
+            const container = document.querySelector('.scroll-container');
+            if (container) {
+                const colUp = document.querySelector('.scroll-column:not(.reverse)').outerHTML;
+                const colDown = document.querySelector('.scroll-column.reverse').outerHTML;
+                // Add 3 more columns for desktop full width
+                container.innerHTML += colUp + colDown + colUp;
+            }
+        });
     </script>
+    
+    <!-- Floating Theme Toggle for Login Page -->
+    <button onclick="toggleTheme()" id="themeToggleBtn" title="Toggle Theme" style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: var(--bg-card); border: none; width: 45px; height: 45px; border-radius: 50%; box-shadow: var(--shadow-clay-sm); cursor: pointer; color: var(--text-gray); font-size: 1.2rem; transition: all 0.3s ease;">
+        <i class="fa-solid fa-moon"></i>
+    </button>
 </body>
 
 </html>

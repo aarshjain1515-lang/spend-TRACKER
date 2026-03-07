@@ -34,7 +34,7 @@ function createCategoryChart() {
                     'rgba(6, 255, 165, 0.8)',      // Green
                     'rgba(255, 99, 132, 0.8)',     // Red
                 ],
-                borderColor: 'rgba(26, 11, 46, 1)',
+                borderColor: 'var(--bg-card)',
                 borderWidth: 3
             }]
         },
@@ -45,7 +45,7 @@ function createCategoryChart() {
                 legend: {
                     position: 'bottom',
                     labels: {
-                        color: '#B8B8FF',
+                        color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#cbd5e1' : '#475569',
                         font: {
                             size: 12,
                             family: 'Inter'
@@ -54,10 +54,10 @@ function createCategoryChart() {
                     }
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(26, 11, 46, 0.9)',
-                    titleColor: '#00F5FF',
-                    bodyColor: '#FFFFFF',
-                    borderColor: '#00F5FF',
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    titleColor: '#38bdf8',
+                    bodyColor: '#f8fafc',
+                    borderColor: '#38bdf8',
                     borderWidth: 1,
                     padding: 12,
                     callbacks: {
@@ -108,18 +108,18 @@ function createBudgetChart() {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        color: '#B8B8FF',
+                        color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#cbd5e1' : '#475569',
                         callback: function (value) {
                             return '₹' + value;
                         }
                     },
                     grid: {
-                        color: 'rgba(255, 255, 255, 0.1)'
+                        color: 'rgba(100, 116, 139, 0.2)'
                     }
                 },
                 x: {
                     ticks: {
-                        color: '#B8B8FF'
+                        color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#cbd5e1' : '#475569'
                     },
                     grid: {
                         display: false
@@ -131,10 +131,10 @@ function createBudgetChart() {
                     display: false
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(26, 11, 46, 0.9)',
-                    titleColor: '#00F5FF',
-                    bodyColor: '#FFFFFF',
-                    borderColor: '#00F5FF',
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    titleColor: '#38bdf8',
+                    bodyColor: '#f8fafc',
+                    borderColor: '#38bdf8',
                     borderWidth: 1,
                     padding: 12,
                     callbacks: {
@@ -179,28 +179,28 @@ function createTrendChart() {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        color: '#B8B8FF',
+                        color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#cbd5e1' : '#475569',
                         callback: function (value) {
                             return '₹' + value;
                         }
                     },
                     grid: {
-                        color: 'rgba(255, 255, 255, 0.1)'
+                        color: 'rgba(100, 116, 139, 0.2)'
                     }
                 },
                 x: {
                     ticks: {
-                        color: '#B8B8FF'
+                        color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#cbd5e1' : '#475569'
                     },
                     grid: {
-                        color: 'rgba(255, 255, 255, 0.05)'
+                        color: 'rgba(100, 116, 139, 0.1)'
                     }
                 }
             },
             plugins: {
                 legend: {
                     labels: {
-                        color: '#B8B8FF',
+                        color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#cbd5e1' : '#475569',
                         font: {
                             size: 12,
                             family: 'Inter'
@@ -208,10 +208,10 @@ function createTrendChart() {
                     }
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(26, 11, 46, 0.9)',
-                    titleColor: '#00F5FF',
-                    bodyColor: '#FFFFFF',
-                    borderColor: '#00F5FF',
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    titleColor: '#38bdf8',
+                    bodyColor: '#f8fafc',
+                    borderColor: '#38bdf8',
                     borderWidth: 1,
                     padding: 12,
                     callbacks: {
@@ -285,3 +285,13 @@ function updateTrendChart() {
     trendChart.data.datasets[0].data = amounts;
     trendChart.update();
 }
+
+// Add event listener to re-render charts on theme change
+window.addEventListener('themeChanged', () => {
+    if (categoryChart) categoryChart.destroy();
+    if (budgetChart) budgetChart.destroy();
+    if (trendChart) trendChart.destroy();
+    
+    initializeCharts();
+    updateCharts();
+});

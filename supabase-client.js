@@ -18,7 +18,7 @@ try {
 
         console.log("✅ Supabase Client Initialized (NEW Vercel Database)");
         console.log("URL:", supabaseUrl);
-        console.log("Google Client ID Linked: 4377...uqa5");
+        console.log("Google Client ID Linked: 1056...bug0");
     }
 } catch (err) {
     console.error("❌ Supabase Init Failed:", err);
